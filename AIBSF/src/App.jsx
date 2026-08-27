@@ -12,7 +12,7 @@ import styles from "./App.module.css";
 import { useState } from "react";
 
 function App() {
-  const [activePage, setActivePage] = useState("dashboards");
+  const [activePage, setActivePage] = useState("dashboard");
 
   return (
     <>
