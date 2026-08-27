@@ -1,0 +1,483 @@
+import { useState } from "react";
+import styles from "./ActiveAlerts.module.css";
+
+function ActiveAlerts() {
+
+    const [selectedAlert, setSelectedAlert] = useState(null);
+
+    const [alerts, setAlerts] = useState([
+        {
+            id: 1,
+            title: "Unauthorized Movement",
+            camera: "Camera 03",
+            location: "East Border Sector",
+            severity: "CRITICAL",
+            confidence: "94.7%",
+            time: "12:45:32",
+            status: "ACTIVE",
+            description:
+                "AI detected unauthorized movement within the restricted border zone.",
+            icon: "⚠"
+        },
+        {
+            id: 2,
+            title: "Suspicious Vehicle",
+            camera: "Camera 07",
+            location: "North Border Sector",
+            severity: "HIGH",
+            confidence: "89.3%",
+            time: "12:42:18",
+            status: "ACTIVE",
+            description:
+                "A suspicious vehicle was detected moving near the restricted surveillance area.",
+            icon: "🚗"
+        },
+        {
+            id: 3,
+            title: "Unknown Person Detected",
+            camera: "Camera 12",
+            location: "West Border Sector",
+            severity: "MEDIUM",
+            confidence: "82.6%",
+            time: "12:38:45",
+            status: "ACTIVE",
+            description:
+                "An unidentified person was detected inside the monitored zone.",
+            icon: "👤"
+        },
+        {
+            id: 4,
+            title: "Object Left Behind",
+            camera: "Camera 09",
+            location: "South Border Sector",
+            severity: "MEDIUM",
+            confidence: "78.9%",
+            time: "12:34:21",
+            status: "ACTIVE",
+            description:
+                "AI detected an unattended object near the surveillance perimeter.",
+            icon: "📦"
+        }
+    ]);
+
+
+    const acknowledgeAlert = (id) => {
+
+        setAlerts(
+            alerts.map((alert) =>
+                alert.id === id
+                    ? { ...alert, status: "ACKNOWLEDGED" }
+                    : alert
+            )
+        );
+
+        setSelectedAlert(null);
+    };
+
+
+    const activeAlerts = alerts.filter(
+        alert => alert.status === "ACTIVE"
+    );
+
+
+    const criticalAlerts = activeAlerts.filter(
+        alert => alert.severity === "CRITICAL"
+    );
+
+
+    const highAlerts = activeAlerts.filter(
+        alert => alert.severity === "HIGH"
+    );
+
+
+    const mediumAlerts = activeAlerts.filter(
+        alert => alert.severity === "MEDIUM"
+    );
+
+
+    return (
+        <div className={styles.alertsPage}>
+
+            {/* ================= TOP ================= */}
+
+            <div className={styles.top}>
+
+                <div>
+                    <h2>ACTIVE ALERTS</h2>
+
+                    <p>
+                        Real-time security alerts requiring attention
+                    </p>
+                </div>
+
+                <div className={styles.liveStatus}>
+                    ● ALERT MONITORING ACTIVE
+                </div>
+
+            </div>
+
+
+            {/* ================= STATISTICS ================= */}
+
+            <div className={styles.stats}>
+
+                <div className={styles.statCard}>
+
+                    <span>ACTIVE ALERTS</span>
+
+                    <h3>
+                        {activeAlerts.length}
+                    </h3>
+
+                    <p>
+                        Currently requiring attention
+                    </p>
+
+                </div>
+
+
+                <div className={styles.statCard}>
+
+                    <span>CRITICAL</span>
+
+                    <h3 className={styles.critical}>
+                        {criticalAlerts.length}
+                    </h3>
+
+                    <p>
+                        Immediate response required
+                    </p>
+
+                </div>
+
+
+                <div className={styles.statCard}>
+
+                    <span>HIGH PRIORITY</span>
+
+                    <h3 className={styles.high}>
+                        {highAlerts.length}
+                    </h3>
+
+                    <p>
+                        Requires investigation
+                    </p>
+
+                </div>
+
+
+                <div className={styles.statCard}>
+
+                    <span>MEDIUM</span>
+
+                    <h3 className={styles.medium}>
+                        {mediumAlerts.length}
+                    </h3>
+
+                    <p>
+                        Under monitoring
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            {/* ================= ALERT PANEL ================= */}
+
+            <div className={styles.alertPanel}>
+
+                <div className={styles.panelHeader}>
+
+                    <div>
+                        <h3>🚨 SECURITY ALERTS</h3>
+
+                        <p>
+                            Latest alerts generated by the AI detection system
+                        </p>
+                    </div>
+
+                    <span>
+                        {activeAlerts.length} ACTIVE
+                    </span>
+
+                </div>
+
+
+                {/* ================= ALERT LIST ================= */}
+
+                <div className={styles.alertList}>
+
+                    {alerts.map((alert) => (
+
+                        <div
+                            key={alert.id}
+                            className={`${styles.alertItem} ${
+                                alert.status === "ACKNOWLEDGED"
+                                    ? styles.acknowledged
+                                    : ""
+                            }`}
+                        >
+
+                            {/* ICON */}
+
+                            <div className={styles.alertIcon}>
+                                {alert.icon}
+                            </div>
+
+
+                            {/* INFORMATION */}
+
+                            <div className={styles.alertInfo}>
+
+                                <div className={styles.alertTitleRow}>
+
+                                    <h4>
+                                        {alert.title}
+                                    </h4>
+
+                                    <span
+                                        className={
+                                            alert.severity === "CRITICAL"
+                                                ? styles.criticalBadge
+                                                : alert.severity === "HIGH"
+                                                    ? styles.highBadge
+                                                    : styles.mediumBadge
+                                        }
+                                    >
+                                        {alert.severity}
+                                    </span>
+
+                                </div>
+
+
+                                <p>
+                                    📹 {alert.camera}
+                                    <span> • </span>
+                                    📍 {alert.location}
+                                </p>
+
+
+                                <div className={styles.alertMeta}>
+
+                                    <span>
+                                        AI Confidence: {alert.confidence}
+                                    </span>
+
+                                    <span>
+                                        Detected: {alert.time}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            {/* STATUS */}
+
+                            <div className={styles.alertStatus}>
+
+                                <span
+                                    className={
+                                        alert.status === "ACTIVE"
+                                            ? styles.activeStatus
+                                            : styles.acknowledgedStatus
+                                    }
+                                >
+                                    ● {alert.status}
+                                </span>
+
+                            </div>
+
+
+                            {/* ACTION */}
+
+                            <div className={styles.alertAction}>
+
+                                {alert.status === "ACTIVE" && (
+
+                                    <button
+                                        onClick={() =>
+                                            setSelectedAlert(alert)
+                                        }
+                                    >
+                                        VIEW
+                                    </button>
+
+                                )}
+
+                            </div>
+
+                        </div>
+
+                    ))}
+
+                </div>
+
+            </div>
+
+
+            {/* ================= DETAILS MODAL ================= */}
+
+            {selectedAlert && (
+
+                <div
+                    className={styles.modalOverlay}
+                    onClick={() => setSelectedAlert(null)}
+                >
+
+                    <div
+                        className={styles.modal}
+                        onClick={(event) =>
+                            event.stopPropagation()
+                        }
+                    >
+
+                        {/* MODAL HEADER */}
+
+                        <div className={styles.modalHeader}>
+
+                            <div>
+
+                                <h3>
+                                    ALERT DETAILS
+                                </h3>
+
+                                <p>
+                                    Security event information
+                                </p>
+
+                            </div>
+
+
+                            <button
+                                className={styles.closeButton}
+                                onClick={() =>
+                                    setSelectedAlert(null)
+                                }
+                            >
+                                ✕
+                            </button>
+
+                        </div>
+
+
+                        {/* TITLE */}
+
+                        <div className={styles.modalTitle}>
+
+                            <div className={styles.modalIcon}>
+                                {selectedAlert.icon}
+                            </div>
+
+                            <div>
+
+                                <h2>
+                                    {selectedAlert.title}
+                                </h2>
+
+                                <span
+                                    className={
+                                        selectedAlert.severity === "CRITICAL"
+                                            ? styles.criticalText
+                                            : selectedAlert.severity === "HIGH"
+                                                ? styles.highText
+                                                : styles.mediumText
+                                    }
+                                >
+                                    ● {selectedAlert.severity}
+                                </span>
+
+                            </div>
+
+                        </div>
+
+
+                        {/* DESCRIPTION */}
+
+                        <div className={styles.description}>
+
+                            <span>
+                                AI ANALYSIS
+                            </span>
+
+                            <p>
+                                {selectedAlert.description}
+                            </p>
+
+                        </div>
+
+
+                        {/* DETAILS */}
+
+                        <div className={styles.detailsGrid}>
+
+                            <div>
+                                <span>CAMERA</span>
+                                <strong>
+                                    {selectedAlert.camera}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>LOCATION</span>
+                                <strong>
+                                    {selectedAlert.location}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>CONFIDENCE</span>
+                                <strong>
+                                    {selectedAlert.confidence}
+                                </strong>
+                            </div>
+
+
+                            <div>
+                                <span>DETECTED AT</span>
+                                <strong>
+                                    {selectedAlert.time}
+                                </strong>
+                            </div>
+
+                        </div>
+
+
+                        {/* ACTIONS */}
+
+                        <div className={styles.modalActions}>
+
+                            <button
+                                className={styles.cameraButton}
+                            >
+                                📹 VIEW CAMERA
+                            </button>
+
+
+                            <button
+                                className={styles.acknowledgeButton}
+                                onClick={() =>
+                                    acknowledgeAlert(
+                                        selectedAlert.id
+                                    )
+                                }
+                            >
+                                ✓ ACKNOWLEDGE
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            )}
+
+        </div>
+    );
+}
+
+export default ActiveAlerts;

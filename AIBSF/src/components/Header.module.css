@@ -1,0 +1,147 @@
+.header {
+    width: 100%;
+    min-height: 80px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 12px 30px;
+
+    background-color: #0d141b;
+    border-bottom: 1px solid #26323d;
+}
+
+
+/* ================= LOGO ================= */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo > h1 {
+    font-size: 38px;
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.brand h1 {
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #ffb84d;
+}
+
+.brand h5 {
+    margin-top: 4px;
+
+    font-size: 9px;
+    letter-spacing: 1px;
+
+    color: #8c9aa5;
+}
+
+
+/* ================= SYSTEM STATUS ================= */
+
+.status {
+    border-left: 1px solid #26323d;
+
+    padding-left: 25px;
+}
+
+.status h2 {
+    font-size: 14px;
+    letter-spacing: 1px;
+
+    color: #65f5aa;
+}
+
+.status p {
+    margin-top: 5px;
+
+    font-size: 11px;
+
+    color: #8c9aa5;
+}
+
+
+/* ================= ALERT ================= */
+
+.alert {
+    border-left: 1px solid #26323d;
+
+    padding-left: 25px;
+}
+
+.alert h2 {
+    font-size: 13px;
+
+    color: #ffb84d;
+}
+
+
+/* ================= USER ================= */
+
+.user {
+    border-left: 1px solid #26323d;
+
+    padding-left: 25px;
+}
+
+.user h5 {
+    font-size: 11px;
+    letter-spacing: 1px;
+
+    color: #c5d1db;
+}
+
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .header {
+        padding: 12px 20px;
+        gap: 20px;
+    }
+
+    .brand h5,
+    .status p {
+        display: none;
+    }
+
+    .status,
+    .alert,
+    .user {
+        padding-left: 15px;
+    }
+}
+
+@media (max-width: 650px) {
+
+    .header {
+        min-height: auto;
+    }
+
+    .brand h1 {
+        font-size: 15px;
+    }
+
+    .logo > h1 {
+        font-size: 28px;
+    }
+
+    .alert,
+    .user {
+        display: none;
+    }
+
+    .status h2 {
+        font-size: 10px;
+    }
+}

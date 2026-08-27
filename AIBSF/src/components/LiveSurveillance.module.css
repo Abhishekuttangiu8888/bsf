@@ -1,0 +1,208 @@
+.surveillance {
+    width: 100%;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+/* TOP */
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 25px;
+    border-bottom: 1px solid #26323d;
+}
+
+.title {
+    display: block;
+}
+
+.title h2 {
+    margin: 0;
+    font-size: 26px;
+    color: white;
+}
+
+.title p {
+    margin-top: 8px;
+    color: #8c9aa5;
+    font-size: 13px;
+}
+
+/* ONLINE STATUS */
+
+.status {
+    padding: 15px 20px;
+
+    background-color: #16222c;
+    border: 1px solid #26323d;
+    border-radius: 8px;
+
+    color: #63e6a4;
+
+    font-size: 12px;
+    font-weight: bold;
+}
+
+/* CAMERA GRID */
+
+.cameraGrid {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 20px;
+
+    margin-top: 25px;
+}
+
+/* CAMERA CARD */
+
+.cameraCard {
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+/* VIDEO */
+
+.video {
+    height: 180px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #0b1117;
+
+    color: #8c9aa5;
+
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+/* CAMERA INFO */
+
+.cameraInfo {
+    padding: 16px;
+}
+
+.cameraTop {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cameraTop h3 {
+    margin: 0;
+
+    color: white;
+
+    font-size: 15px;
+}
+
+.active {
+    color: #63e6a4;
+
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.location {
+    margin: 12px 0 0;
+
+    color: #8c9aa5;
+
+    font-size: 12px;
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 1000px) {
+
+    .cameraGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 650px) {
+
+    .top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .cameraGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
+.warning {
+    color: #ffb020;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.offline {
+    color: #ff4d4d;
+    font-size: 11px;
+    font-weight: bold;
+}
+.video {
+    height: 180px;
+
+    position: relative;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: #0b1117;
+
+    color: #8c9aa5;
+
+    font-size: 12px;
+    letter-spacing: 2px;
+
+    border-bottom: 1px solid #26323d;
+}
+
+.live {
+    position: absolute;
+
+    top: 12px;
+    left: 12px;
+
+    color: #ff4d4d;
+
+    font-size: 10px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.feedText {
+    color: #52616d;
+
+    font-size: 12px;
+    letter-spacing: 2px;
+}
+
+.timestamp {
+    position: absolute;
+
+    right: 12px;
+    bottom: 12px;
+
+    color: #8c9aa5;
+
+    font-size: 10px;
+}

@@ -1,0 +1,801 @@
+.alertsPage {
+    width: 100%;
+    min-height: calc(100vh - 80px);
+
+    padding: 30px;
+
+    box-sizing: border-box;
+
+    background-color: #111a22;
+}
+
+
+/* =========================
+   TOP
+========================= */
+
+.top {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    padding-bottom: 25px;
+
+    border-bottom: 1px solid #26323d;
+}
+
+.top h2 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 26px;
+
+    letter-spacing: 1px;
+}
+
+.top p {
+    margin: 8px 0 0;
+
+    color: #8c9aa5;
+
+    font-size: 13px;
+}
+
+
+/* =========================
+   LIVE STATUS
+========================= */
+
+.liveStatus {
+    padding: 14px 18px;
+
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+
+    border-radius: 8px;
+
+    color: #63e6a4;
+
+    font-size: 11px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   STATISTICS
+========================= */
+
+.stats {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 18px;
+
+    margin-top: 25px;
+}
+
+.statCard {
+    min-height: 130px;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+
+    border-radius: 8px;
+
+    transition: 0.2s;
+}
+
+.statCard:hover {
+    border-color: #3c5365;
+}
+
+.statCard span {
+    color: #8c9aa5;
+
+    font-size: 10px;
+
+    letter-spacing: 1px;
+}
+
+.statCard h3 {
+    margin: 12px 0 5px;
+
+    color: #ffffff;
+
+    font-size: 30px;
+}
+
+.statCard p {
+    margin: 0;
+
+    color: #71808c;
+
+    font-size: 10px;
+}
+
+
+/* =========================
+   SEVERITY COLORS
+========================= */
+
+.critical {
+    color: #ff4d4d !important;
+}
+
+.high {
+    color: #ffb020 !important;
+}
+
+.medium {
+    color: #ffd45c !important;
+}
+
+
+/* =========================
+   ALERT PANEL
+========================= */
+
+.alertPanel {
+    margin-top: 25px;
+
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+
+/* =========================
+   PANEL HEADER
+========================= */
+
+.panelHeader {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px;
+
+    border-bottom: 1px solid #26323d;
+}
+
+.panelHeader h3 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 13px;
+
+    letter-spacing: 1px;
+}
+
+.panelHeader p {
+    margin: 6px 0 0;
+
+    color: #71808c;
+
+    font-size: 10px;
+}
+
+.panelHeader > span {
+    padding: 7px 10px;
+
+    background-color: #2a1717;
+
+    border-radius: 5px;
+
+    color: #ff4d4d;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   ALERT LIST
+========================= */
+
+.alertList {
+    padding: 0 20px;
+}
+
+
+/* =========================
+   ALERT ITEM
+========================= */
+
+.alertItem {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 18px 0;
+
+    border-bottom: 1px solid #26323d;
+
+    transition: 0.2s;
+}
+
+.alertItem:last-child {
+    border-bottom: none;
+}
+
+.alertItem:hover {
+    background-color: #182731;
+}
+
+
+/* =========================
+   ACKNOWLEDGED
+========================= */
+
+.acknowledged {
+    opacity: 0.5;
+}
+
+
+/* =========================
+   ALERT ICON
+========================= */
+
+.alertIcon {
+    width: 42px;
+    height: 42px;
+
+    min-width: 42px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #2a2317;
+
+    border-radius: 7px;
+
+    font-size: 18px;
+}
+
+
+/* =========================
+   ALERT INFO
+========================= */
+
+.alertInfo {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.alertTitleRow {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+}
+
+.alertTitleRow h4 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 13px;
+}
+
+.alertInfo > p {
+    margin: 7px 0;
+
+    color: #8c9aa5;
+
+    font-size: 10px;
+}
+
+.alertMeta {
+    display: flex;
+
+    gap: 20px;
+}
+
+.alertMeta span {
+    color: #657581;
+
+    font-size: 9px;
+}
+
+
+/* =========================
+   BADGES
+========================= */
+
+.criticalBadge,
+.highBadge,
+.mediumBadge {
+    padding: 5px 7px;
+
+    border-radius: 4px;
+
+    font-size: 8px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.criticalBadge {
+    color: #ff4d4d;
+
+    background-color: #2a1717;
+}
+
+.highBadge {
+    color: #ffb020;
+
+    background-color: #2a2317;
+}
+
+.mediumBadge {
+    color: #ffd45c;
+
+    background-color: #292717;
+}
+
+
+/* =========================
+   STATUS
+========================= */
+
+.alertStatus {
+    min-width: 95px;
+
+    text-align: center;
+}
+
+.activeStatus {
+    color: #ff4d4d;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.acknowledgedStatus {
+    color: #63e6a4;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   VIEW BUTTON
+========================= */
+
+.alertAction button {
+    padding: 8px 14px;
+
+    background-color: #1d2c37;
+
+    border: 1px solid #344653;
+
+    border-radius: 5px;
+
+    color: #c5d1db;
+
+    font-size: 9px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+
+    cursor: pointer;
+}
+
+.alertAction button:hover {
+    background-color: #263945;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   MODAL OVERLAY
+========================= */
+
+.modalOverlay {
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    background-color: rgba(0, 0, 0, 0.72);
+
+    z-index: 1000;
+}
+
+
+/* =========================
+   MODAL
+========================= */
+
+.modal {
+    width: 100%;
+
+    max-width: 550px;
+
+    background-color: #16222c;
+
+    border: 1px solid #344653;
+
+    border-radius: 10px;
+
+    overflow: hidden;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+
+/* =========================
+   MODAL HEADER
+========================= */
+
+.modalHeader {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 20px;
+
+    border-bottom: 1px solid #26323d;
+}
+
+.modalHeader h3 {
+    margin: 0;
+
+    color: #ffffff;
+
+    font-size: 14px;
+
+    letter-spacing: 1px;
+}
+
+.modalHeader p {
+    margin: 5px 0 0;
+
+    color: #71808c;
+
+    font-size: 10px;
+}
+
+.closeButton {
+    width: 32px;
+    height: 32px;
+
+    background-color: transparent;
+
+    border: 1px solid #344653;
+
+    border-radius: 5px;
+
+    color: #8c9aa5;
+
+    cursor: pointer;
+}
+
+.closeButton:hover {
+    background-color: #24333f;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   MODAL TITLE
+========================= */
+
+.modalTitle {
+    display: flex;
+
+    align-items: center;
+
+    gap: 15px;
+
+    padding: 25px 20px;
+}
+
+.modalIcon {
+    width: 50px;
+    height: 50px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background-color: #2a2317;
+
+    border-radius: 8px;
+
+    font-size: 22px;
+}
+
+.modalTitle h2 {
+    margin: 0 0 7px;
+
+    color: #ffffff;
+
+    font-size: 17px;
+}
+
+.criticalText,
+.highText,
+.mediumText {
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.criticalText {
+    color: #ff4d4d;
+}
+
+.highText {
+    color: #ffb020;
+}
+
+.mediumText {
+    color: #ffd45c;
+}
+
+
+/* =========================
+   DESCRIPTION
+========================= */
+
+.description {
+    margin: 0 20px 20px;
+
+    padding: 15px;
+
+    background-color: #111a22;
+
+    border: 1px solid #26323d;
+
+    border-radius: 6px;
+}
+
+.description span {
+    color: #71808c;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.description p {
+    margin: 8px 0 0;
+
+    color: #c5d1db;
+
+    font-size: 11px;
+
+    line-height: 1.6;
+}
+
+
+/* =========================
+   DETAILS GRID
+========================= */
+
+.detailsGrid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    margin: 0 20px;
+
+    border: 1px solid #26323d;
+
+    border-radius: 6px;
+
+    overflow: hidden;
+}
+
+.detailsGrid div {
+    padding: 14px;
+
+    border-bottom: 1px solid #26323d;
+}
+
+.detailsGrid div:nth-child(odd) {
+    border-right: 1px solid #26323d;
+}
+
+.detailsGrid span {
+    display: block;
+
+    margin-bottom: 6px;
+
+    color: #71808c;
+
+    font-size: 9px;
+
+    letter-spacing: 1px;
+}
+
+.detailsGrid strong {
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+
+/* =========================
+   MODAL ACTIONS
+========================= */
+
+.modalActions {
+    display: flex;
+
+    gap: 10px;
+
+    padding: 20px;
+}
+
+.cameraButton,
+.acknowledgeButton {
+    flex: 1;
+
+    padding: 12px;
+
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-size: 10px;
+
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.cameraButton {
+    background-color: #193328;
+
+    border: 1px solid #3cff8f;
+
+    color: #63e6a4;
+}
+
+.cameraButton:hover {
+    background-color: #214535;
+}
+
+.acknowledgeButton {
+    background-color: #2a2317;
+
+    border: 1px solid #ffb020;
+
+    color: #ffb020;
+}
+
+.acknowledgeButton:hover {
+    background-color: #3a301c;
+}
+
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 1000px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .alertItem {
+        align-items: flex-start;
+    }
+
+    .alertStatus {
+        display: none;
+    }
+}
+
+
+@media (max-width: 650px) {
+
+    .alertsPage {
+        padding: 20px;
+    }
+
+    .top {
+        flex-direction: column;
+
+        align-items: flex-start;
+
+        gap: 18px;
+    }
+
+    .top h2 {
+        font-size: 22px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .alertItem {
+        flex-wrap: wrap;
+    }
+
+    .alertInfo {
+        width: calc(100% - 57px);
+    }
+
+    .alertAction {
+        width: 100%;
+
+        margin-left: 57px;
+    }
+
+    .alertAction button {
+        width: 100%;
+    }
+
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .detailsGrid div:nth-child(odd) {
+        border-right: none;
+    }
+
+    .modalActions {
+        flex-direction: column;
+    }
+}

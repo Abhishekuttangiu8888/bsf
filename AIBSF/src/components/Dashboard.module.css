@@ -1,0 +1,217 @@
+.dashboard {
+    flex: 1;
+    min-height: calc(100vh - 80px);
+
+    padding: 30px;
+
+    background-color: #111a22;
+
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+
+    box-sizing: border-box;
+}
+
+
+/* =========================
+   DASHBOARD HEADER
+========================= */
+
+.first {
+    grid-column: span 3;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.first h1 {
+    margin: 0;
+
+    font-size: 24px;
+    letter-spacing: 1px;
+
+    color: #ffffff;
+}
+
+.first h5 {
+    margin-top: 8px;
+
+    font-size: 12px;
+    font-weight: normal;
+
+    color: #8c9aa5;
+}
+
+
+/* =========================
+   LIVE SYSTEM STATUS
+========================= */
+
+.second {
+    grid-column: span 1;
+
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+    border-radius: 8px;
+
+    padding: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 6px;
+}
+
+.second div:first-child {
+    color: #3cff8f;
+
+    font-size: 12px;
+    font-weight: bold;
+
+    letter-spacing: 1px;
+}
+
+.second div:last-child {
+    color: #8c9aa5;
+
+    font-size: 11px;
+}
+
+
+/* =========================
+   STATUS CARDS
+========================= */
+
+.third,
+.fourth,
+.fifth,
+.sixth {
+    background-color: #16222c;
+
+    border: 1px solid #26323d;
+    border-radius: 8px;
+
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    min-height: 140px;
+
+    box-sizing: border-box;
+
+    transition: 0.2s;
+}
+
+
+/* Hover Effect */
+
+.third:hover,
+.fourth:hover,
+.fifth:hover,
+.sixth:hover {
+    border-color: #3c5365;
+}
+
+
+/* =========================
+   CARD TITLES
+========================= */
+
+.third div:first-child,
+.fourth div:first-child,
+.fifth div:first-child,
+.sixth div:first-child {
+    font-size: 11px;
+
+    color: #8c9aa5;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================
+   CARD MAIN VALUES
+========================= */
+
+.third div:nth-child(2),
+.fourth div:nth-child(2),
+.fifth div:nth-child(2),
+.sixth div:nth-child(2) {
+    font-size: 30px;
+
+    font-weight: bold;
+
+    color: #ffffff;
+}
+
+
+/* =========================
+   CARD DESCRIPTION
+========================= */
+
+.third div:last-child,
+.fourth div:last-child,
+.fifth div:last-child,
+.sixth div:last-child {
+    font-size: 11px;
+
+    color: #8c9aa5;
+}
+
+
+/* =========================
+   CARD SPECIFIC COLORS
+========================= */
+
+.fourth div:nth-child(2) {
+    color: #3cff8f;
+}
+
+.fifth div:nth-child(2) {
+    color: #ff4d4d;
+}
+
+.sixth div:nth-child(2) {
+    color: #3cff8f;
+}
+
+
+/* =========================
+   RESPONSIVE DESIGN
+========================= */
+
+@media (max-width: 1100px) {
+
+    .dashboard {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .first {
+        grid-column: span 1;
+    }
+
+    .second {
+        grid-column: span 1;
+    }
+}
+
+
+@media (max-width: 700px) {
+
+    .dashboard {
+        grid-template-columns: 1fr;
+
+        padding: 20px;
+    }
+
+    .first,
+    .second {
+        grid-column: span 1;
+    }
+}
