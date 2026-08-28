@@ -8,6 +8,22 @@ function BorderMap() {
     const mapThreats = activeThreats.filter((threat) => threat.x && threat.y);
 
     const [selectedCamera, setSelectedCamera] = useState(null);
+    const [liveCamera, setLiveCamera] = useState(null);
+
+    const getVideo = (cameraId) => {
+        const videos = [
+            "/videos/camera1.mp4",
+            "/videos/camera2.mp4",
+            "/videos/camera3.mp4",
+            "/videos/camera4.mp4"
+        ];
+        return videos[(cameraId - 1) % videos.length];
+    };
+
+    const handleViewLive = () => {
+        setLiveCamera(selectedCamera);
+        setSelectedCamera(null);
+    };
 
     return (
         <div className={styles.mapPage}>
@@ -113,6 +129,8 @@ function BorderMap() {
 
             </div>
 
+            {/* CAMERA STATUS POPUP */}
+
             {selectedCamera && (
                 <div className={styles.cameraPanel} onClick={() => setSelectedCamera(null)}>
                     <div className={styles.cameraDetails} onClick={(event) => event.stopPropagation()}>
@@ -133,7 +151,39 @@ function BorderMap() {
                             ● {selectedCamera.status}
                         </div>
 
-                        <button className={styles.viewButton}>VIEW LIVE CAMERA</button>
+                        <button className={styles.viewButton} onClick={handleViewLive}>
+                            VIEW LIVE CAMERA
+                        </button>
+
+                    </div>
+                </div>
+            )}
+
+            {/* LIVE VIDEO FEED — stays on this page, no navigation */}
+
+            {liveCamera && (
+                <div className={styles.livePanel} onClick={() => setLiveCamera(null)}>
+                    <div className={styles.liveModal} onClick={(event) => event.stopPropagation()}>
+
+                        <button className={styles.closeButton} onClick={() => setLiveCamera(null)}>✕</button>
+
+                        <div className={styles.liveVideo}>
+                            <video
+                                key={liveCamera.id}
+                                src={getVideo(liveCamera.id)}
+                                autoPlay
+                                muted
+                                loop
+                                playsInline
+                                controls
+                            />
+                            <span className={styles.liveTag}>● LIVE</span>
+                        </div>
+
+                        <div className={styles.liveInfo}>
+                            <h3>{liveCamera.name}</h3>
+                            <p>📍 {liveCamera.location}</p>
+                        </div>
 
                     </div>
                 </div>
