@@ -1,98 +1,25 @@
 import { useState } from "react";
 import styles from "./ActiveAlerts.module.css";
+import { useSurveillance } from "../context/SurveillanceContext";
 
 function ActiveAlerts() {
 
-    const [selectedAlert, setSelectedAlert] = useState(null);
+    const {
+        threats: alerts,
+        acknowledgeThreat,
+        activeThreats: activeAlerts,
+        criticalThreats: criticalAlerts,
+        highThreats: highAlerts,
+        mediumThreats: mediumAlerts
+    } = useSurveillance();
 
-    const [alerts, setAlerts] = useState([
-        {
-            id: 1,
-            title: "Unauthorized Movement",
-            camera: "Camera 03",
-            location: "East Border Sector",
-            severity: "CRITICAL",
-            confidence: "94.7%",
-            time: "12:45:32",
-            status: "ACTIVE",
-            description:
-                "AI detected unauthorized movement within the restricted border zone.",
-            icon: "⚠"
-        },
-        {
-            id: 2,
-            title: "Suspicious Vehicle",
-            camera: "Camera 07",
-            location: "North Border Sector",
-            severity: "HIGH",
-            confidence: "89.3%",
-            time: "12:42:18",
-            status: "ACTIVE",
-            description:
-                "A suspicious vehicle was detected moving near the restricted surveillance area.",
-            icon: "🚗"
-        },
-        {
-            id: 3,
-            title: "Unknown Person Detected",
-            camera: "Camera 12",
-            location: "West Border Sector",
-            severity: "MEDIUM",
-            confidence: "82.6%",
-            time: "12:38:45",
-            status: "ACTIVE",
-            description:
-                "An unidentified person was detected inside the monitored zone.",
-            icon: "👤"
-        },
-        {
-            id: 4,
-            title: "Object Left Behind",
-            camera: "Camera 09",
-            location: "South Border Sector",
-            severity: "MEDIUM",
-            confidence: "78.9%",
-            time: "12:34:21",
-            status: "ACTIVE",
-            description:
-                "AI detected an unattended object near the surveillance perimeter.",
-            icon: "📦"
-        }
-    ]);
+    const [selectedAlert, setSelectedAlert] = useState(null);
 
 
     const acknowledgeAlert = (id) => {
-
-        setAlerts(
-            alerts.map((alert) =>
-                alert.id === id
-                    ? { ...alert, status: "ACKNOWLEDGED" }
-                    : alert
-            )
-        );
-
+        acknowledgeThreat(id);
         setSelectedAlert(null);
     };
-
-
-    const activeAlerts = alerts.filter(
-        alert => alert.status === "ACTIVE"
-    );
-
-
-    const criticalAlerts = activeAlerts.filter(
-        alert => alert.severity === "CRITICAL"
-    );
-
-
-    const highAlerts = activeAlerts.filter(
-        alert => alert.severity === "HIGH"
-    );
-
-
-    const mediumAlerts = activeAlerts.filter(
-        alert => alert.severity === "MEDIUM"
-    );
 
 
     return (

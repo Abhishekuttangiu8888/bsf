@@ -7,6 +7,7 @@ import ActiveAlerts from "./components/ActiveAlerts";
 import BorderMap from "./components/BorderMap";
 import AIAnalytics from "./components/AIAnalytics";
 import Cameras from "./components/Cameras";
+import { SurveillanceProvider } from "./context/SurveillanceContext";
 import Settings from "./components/Settings";
 import styles from "./App.module.css";
 import { useState } from "react";
@@ -16,6 +17,7 @@ function App() {
 
   return (
     <>
+    <SurveillanceProvider>
       <Header />
 
       <div className={styles.layout}>
@@ -44,6 +46,7 @@ function App() {
 
         </main>
       </div>
+    </SurveillanceProvider>
     </>
   );
 }

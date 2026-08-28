@@ -1,139 +1,68 @@
 .sidebar {
     width: 260px;
     min-width: 260px;
-
     min-height: calc(100vh - 80px);
-
     padding: 20px 12px;
-
-    background-color: #0d141b;
-
-    border-right: 1px solid #26323d;
-
+    background-color: var(--navy);
+    border-right: 1px solid var(--border-color);
     box-sizing: border-box;
 }
 
+.first, .second, .third, .fourth { padding: 12px 8px 20px; }
 
-/* ================= ALL SECTIONS ================= */
-
-.first,
-.second,
-.third,
-.fourth {
-    padding: 12px 8px 20px;
-}
-
-
-/* ================= SEPARATION LINES ================= */
-
-.first,
-.second,
-.third {
-    border-bottom: 1px solid #26323d;
-
+.first, .second, .third {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     margin-bottom: 15px;
 }
 
-
-/* ================= SECTION HEADINGS ================= */
-
 .sidebar h4 {
     margin-bottom: 14px;
-
     font-size: 10px;
     letter-spacing: 2px;
-
-    color: #7f91a1;
+    color: var(--gold);
 }
-
-
-/* ================= MENU ITEMS ================= */
 
 .first > div > div,
 .second > div > div,
 .third > div > div {
     padding: 12px 12px;
-
     margin-bottom: 5px;
-
     border-radius: 5px;
-
     font-size: 14px;
-
-    color: #c5d1db;
-
+    color: rgba(255, 255, 255, 0.75);
     cursor: pointer;
-
     transition: 0.2s;
 }
-
-
-/* ================= HOVER ================= */
 
 .first > div > div:hover,
 .second > div > div:hover,
 .third > div > div:hover {
-    background-color: #16222c;
-
+    background-color: var(--navy-light);
     color: #ffffff;
 }
 
-
-/* ================= ACTIVE MENU ================= */
-
 .active {
-    background-color: #16222c;
-
-    border-left: 3px solid #65f5aa;
-
+    background-color: var(--navy-light);
+    border-left: 3px solid var(--gold);
     color: #ffffff !important;
 }
 
-
-/* ================= SECURE CONNECTION ================= */
-
-.fourth h4 {
-    margin-bottom: 16px;
-}
-
+.fourth h4 { margin-bottom: 16px; }
 .fourth > div > div {
     padding: 10px 12px;
-
     font-size: 11px;
     letter-spacing: 1px;
-
-    color: #65f5aa;
+    color: #7fe0ab;
 }
 
-
-/* ================= RESPONSIVE ================= */
-
 @media (max-width: 800px) {
-
-    .sidebar {
-        width: 220px;
-        min-width: 220px;
-    }
+    .sidebar { width: 220px; min-width: 220px; }
 }
 
 @media (max-width: 600px) {
-
-    .sidebar {
-        width: 70px;
-        min-width: 70px;
-
-        padding: 15px 8px;
-    }
-
-    .sidebar h4 {
-        display: none;
-    }
-
+    .sidebar { width: 70px; min-width: 70px; padding: 15px 8px; }
+    .sidebar h4 { display: none; }
     .first > div > div,
     .second > div > div,
-    .third > div > div {
-        font-size: 0;
-
-        text-align: center;
-    }
+    .third > div > div { font-size: 0; text-align: center; }
 }

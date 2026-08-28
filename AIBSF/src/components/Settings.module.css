@@ -1,158 +1,181 @@
 .settings {
     width: 100%;
+    min-width: 0;
     min-height: calc(100vh - 80px);
 
-    padding: 30px;
+    padding: 32px 40px 50px;
 
     box-sizing: border-box;
-
-    background-color: #111a22;
+    background-color: var(--bg-page);
 }
 
-
 /* =========================
-   TOP
+   TOP HEADER
 ========================= */
 
 .top {
-    display: flex;
+    width: 100%;
 
+    display: flex;
     justify-content: space-between;
     align-items: center;
 
-    padding-bottom: 25px;
+    gap: 30px;
 
-    border-bottom: 1px solid #26323d;
+    padding-bottom: 24px;
+    margin-bottom: 20px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    box-sizing: border-box;
 }
 
 .top h2 {
     margin: 0;
 
-    color: #ffffff;
-
+    color: var(--navy);
     font-size: 26px;
-
+    font-weight: 700;
     letter-spacing: 1px;
 }
 
 .top p {
     margin: 8px 0 0;
 
-    color: #8c9aa5;
-
+    color: var(--text-secondary);
     font-size: 13px;
 }
 
+/* =========================
+   SAVE STATUS
+========================= */
+
 .savedStatus,
 .unsavedStatus {
-    padding: 14px 18px;
+    flex-shrink: 0;
 
-    background-color: #16222c;
-
-    border: 1px solid #26323d;
+    padding: 12px 18px;
 
     border-radius: 8px;
 
-    font-size: 10px;
-
-    font-weight: bold;
-
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 1px;
 }
 
 .savedStatus {
-    color: #63e6a4;
+    background-color: var(--success-bg);
+    border: 1px solid var(--success-border);
+    color: var(--success);
 }
 
 .unsavedStatus {
-    color: #ffb020;
+    background-color: var(--warning-bg);
+    border: 1px solid var(--warning-border);
+    color: var(--warning);
 }
 
-
 /* =========================
-   CARDS
+   MAIN SETTINGS CARD
 ========================= */
 
 .card {
+    width: 100%;
+
     margin-top: 20px;
 
-    background-color: #16222c;
+    background-color: var(--bg-card);
 
-    border: 1px solid #26323d;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
 
-    border-radius: 8px;
+    box-shadow: var(--shadow-card);
 
     overflow: hidden;
+    box-sizing: border-box;
 }
 
-.cardHeader {
-    padding: 18px 20px;
+/* =========================
+   CARD HEADER
+========================= */
 
-    border-bottom: 1px solid #26323d;
+.cardHeader {
+    padding: 20px 24px;
+
+    border-bottom: 1px solid var(--border-color);
+
+    box-sizing: border-box;
 }
 
 .cardHeader h3 {
     margin: 0;
 
-    color: #ffffff;
+    color: var(--text-primary);
 
-    font-size: 13px;
-
+    font-size: 14px;
+    font-weight: 700;
     letter-spacing: 1px;
 }
 
 .cardHeader p {
-    margin: 6px 0 0;
+    margin: 7px 0 0;
 
-    color: #71808c;
+    color: var(--text-muted);
 
-    font-size: 10px;
+    font-size: 12px;
 }
 
-
 /* =========================
-   ROWS
+   SETTINGS ROWS
 ========================= */
 
 .rows {
-    padding: 0 20px;
+    width: 100%;
+
+    padding: 0 24px;
+
+    box-sizing: border-box;
 }
 
 .row {
+    width: 100%;
+    min-height: 78px;
+
     display: flex;
-
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
 
-    gap: 20px;
+    gap: 30px;
 
-    padding: 18px 0;
+    border-bottom: 1px solid var(--border-color);
 
-    border-bottom: 1px solid #26323d;
+    box-sizing: border-box;
 }
 
 .row:last-child {
     border-bottom: none;
 }
 
+.row > div:first-child {
+    display: flex;
+    flex-direction: column;
+
+    gap: 6px;
+}
+
 .row strong {
-    display: block;
+    color: var(--text-primary);
 
-    color: #d6e0e6;
-
-    font-size: 12px;
+    font-size: 13px;
+    font-weight: 600;
 }
 
 .row span {
-    display: block;
+    color: var(--text-muted);
 
-    margin-top: 5px;
-
-    color: #71808c;
-
-    font-size: 10px;
+    font-size: 11px;
+    line-height: 1.5;
 }
-
 
 /* =========================
    TOGGLE SWITCH
@@ -161,12 +184,12 @@
 .switch {
     position: relative;
 
-    width: 44px;
+    display: inline-block;
+
+    width: 46px;
     height: 24px;
 
-    min-width: 44px;
-
-    display: inline-block;
+    flex-shrink: 0;
 }
 
 .switch input {
@@ -179,15 +202,18 @@
 .slider {
     position: absolute;
 
-    inset: 0;
-
-    background-color: #26323d;
-
-    border-radius: 24px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 
     cursor: pointer;
 
-    transition: 0.2s;
+    background-color: #cbd5df;
+
+    border-radius: 30px;
+
+    transition: 0.25s;
 }
 
 .slider::before {
@@ -199,186 +225,205 @@
     height: 18px;
 
     left: 3px;
-    bottom: 3px;
+    top: 3px;
 
-    background-color: #c5d1db;
+    background-color: white;
 
     border-radius: 50%;
 
-    transition: 0.2s;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+
+    transition: 0.25s;
 }
 
 .switch input:checked + .slider {
-    background-color: #193328;
-
-    border: 1px solid #3cff8f;
+    background-color: var(--success);
 }
 
 .switch input:checked + .slider::before {
-    transform: translateX(20px);
-
-    background-color: #63e6a4;
+    transform: translateX(22px);
 }
-
-
-/* =========================
-   SLIDER (RANGE)
-========================= */
-
-.sliderRow {
-    padding: 18px 0;
-}
-
-.sliderLabel {
-    display: flex;
-
-    justify-content: space-between;
-
-    margin-bottom: 10px;
-}
-
-.sliderLabel strong {
-    color: #d6e0e6;
-
-    font-size: 12px;
-}
-
-.sliderLabel span {
-    color: #63e6a4;
-
-    font-size: 12px;
-
-    font-weight: bold;
-}
-
-.range {
-    width: 100%;
-
-    accent-color: #63e6a4;
-}
-
-.hint {
-    margin: 10px 0 0;
-
-    color: #71808c;
-
-    font-size: 10px;
-}
-
 
 /* =========================
    SELECT
 ========================= */
 
 .select {
-    padding: 9px 12px;
+    width: 180px;
 
-    background-color: #111a22;
+    padding: 10px 12px;
 
-    border: 1px solid #344653;
+    background-color: var(--bg-card);
 
-    border-radius: 5px;
+    border: 1px solid var(--border-strong);
+    border-radius: 6px;
 
-    color: #c5d1db;
+    color: var(--text-primary);
 
-    font-size: 10px;
+    font-size: 12px;
 
-    font-weight: bold;
-
+    outline: none;
     cursor: pointer;
 }
 
+.select:focus {
+    border-color: var(--navy-light);
+}
+
+/* =========================
+   RANGE SLIDER
+========================= */
+
+.rangeContainer {
+    width: 60%;
+
+    display: flex;
+    align-items: center;
+
+    gap: 15px;
+}
+
+.range {
+    width: 100%;
+
+    cursor: pointer;
+
+    accent-color: var(--success);
+}
+
+.rangeValue {
+    min-width: 45px;
+
+    color: var(--success) !important;
+
+    font-size: 13px !important;
+    font-weight: 700;
+}
 
 /* =========================
    SAVE BAR
 ========================= */
 
 .saveBar {
-    display: flex;
-
-    justify-content: space-between;
-    align-items: center;
+    width: 100%;
 
     margin-top: 25px;
 
-    padding: 18px 20px;
+    padding: 18px 24px;
 
-    background-color: #16222c;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 
-    border: 1px solid #26323d;
+    gap: 20px;
 
-    border-radius: 8px;
+    background-color: var(--bg-card);
+
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+
+    box-shadow: var(--shadow-card);
+
+    box-sizing: border-box;
 }
 
-.saveBar span {
-    color: #8c9aa5;
+.saveBar > span {
+    color: var(--text-secondary);
 
-    font-size: 11px;
+    font-size: 12px;
 }
 
 .saveButton {
-    padding: 12px 20px;
+    padding: 12px 22px;
 
-    background-color: #193328;
+    background-color: var(--navy);
 
-    border: 1px solid #3cff8f;
+    border: none;
+    border-radius: 6px;
 
-    border-radius: 5px;
+    color: white;
 
-    color: #63e6a4;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
+    font-size: 11px;
+    font-weight: 700;
     letter-spacing: 1px;
 
     cursor: pointer;
+
+    transition: 0.2s;
 }
 
 .saveButton:hover:not(:disabled) {
-    background-color: #214535;
+    background-color: var(--navy-light);
 }
 
 .saveButton:disabled {
-    opacity: 0.4;
+    opacity: 0.5;
 
     cursor: not-allowed;
 }
 
-
 /* =========================
-   RESPONSIVE
+   TABLET
 ========================= */
 
-@media (max-width: 650px) {
+@media (max-width: 1000px) {
+    .settings {
+        padding: 25px;
+    }
 
+    .rangeContainer {
+        width: 70%;
+    }
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 700px) {
     .settings {
         padding: 20px;
     }
 
     .top {
         flex-direction: column;
-
         align-items: flex-start;
-
-        gap: 18px;
     }
 
     .top h2 {
         font-size: 22px;
     }
 
+    .cardHeader {
+        padding: 18px;
+    }
+
+    .rows {
+        padding: 0 18px;
+    }
+
     .row {
-        flex-wrap: wrap;
+        min-height: auto;
+
+        padding: 18px 0;
+
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .select {
+        width: 100%;
+    }
+
+    .rangeContainer {
+        width: 100%;
     }
 
     .saveBar {
+        padding: 18px;
+
         flex-direction: column;
-
-        align-items: flex-start;
-
-        gap: 12px;
+        align-items: stretch;
     }
 
     .saveButton {
