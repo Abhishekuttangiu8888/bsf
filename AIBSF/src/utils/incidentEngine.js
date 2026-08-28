@@ -1,69 +1,13 @@
-const CORRELATION_TIME_WINDOW = 2 * 60 * 1000;
-
-// Maximum distance between cameras that can
-// belong to the same incident.
-const MAX_CAMERA_DISTANCE_KM = 3;
-
-
 /*
-CALCULATE DISTANCE BETWEEN TWO CAMERAS
+    INCIDENT CORRELATION ENGINE
+
+    Connects detections from different cameras
+    when they appear to belong to the same incident.
 */
 
-function getDistanceInKm(
-    lat1,
-    lon1,
-    lat2,
-    lon2
-) {
-
-    const earthRadius = 6371;
-
-    const dLat =
-        ((lat2 - lat1) * Math.PI) / 180;
-
-    const dLon =
-        ((lon2 - lon1) * Math.PI) / 180;
-
-
-    const a =
-
-        Math.sin(dLat / 2) *
-        Math.sin(dLat / 2)
-
-        +
-
-        Math.cos(
-            (lat1 * Math.PI) / 180
-        )
-
-        *
-
-        Math.cos(
-            (lat2 * Math.PI) / 180
-        )
-
-        *
-
-        Math.sin(dLon / 2) *
-        Math.sin(dLon / 2);
-
-
-    const c =
-        2 *
-        Math.atan2(
-            Math.sqrt(a),
-            Math.sqrt(1 - a)
-        );
-
-
-    return earthRadius * c;
-
-}
-
 
 /*
-CHECK WHETHER A NEW DETECTION
-BELONGS TO AN EXISTING INCIDENT
+    Find a related incident
 */
 
 export function findRelatedIncident(
@@ -72,89 +16,79 @@ export function findRelatedIncident(
     camera
 ) {
 
+    if (!incidents || incidents.length === 0) {
+        return null;
+    }
+
+
     const now =
-        detection.timestamp;
+        Date.now();
+
+
+    /*
+        Incidents are considered related when:
+
+        1. They happened recently
+        2. They involve the same detection class
+        3. They are in the same or nearby zone
+    */
+
+    const INCIDENT_TIME_WINDOW =
+        5 * 60 * 1000;
 
 
     for (const incident of incidents) {
 
-        /*
-        DO NOT ADD DETECTIONS
-        TO RESOLVED INCIDENTS
-        */
-
-        if (
-            incident.status === "RESOLVED"
-        ) {
-            continue;
-        }
-
-
-        /*
-        CHECK TIME WINDOW
-        */
-
         const timeDifference =
+            now - incident.lastUpdated;
 
-            Math.abs(
-                now -
-                incident.lastUpdated
-            );
 
+        /*
+            Ignore old incidents
+        */
 
         if (
             timeDifference >
-            CORRELATION_TIME_WINDOW
+            INCIDENT_TIME_WINDOW
         ) {
+
             continue;
+
         }
 
 
         /*
-        CHECK DISTANCE BETWEEN
-        NEW CAMERA AND CAMERAS
-        ALREADY INSIDE THE INCIDENT
+            Check zone relationship
         */
 
-        for (
-            const incidentCamera
-            of incident.cameras
+        const sameZone =
+            incident.zones?.includes(
+                camera.zone
+            );
+
+
+        /*
+            Check detection class
+        */
+
+        const sameClass =
+            incident.detections?.some(
+                (item) =>
+                    String(item.className).toLowerCase() ===
+                    String(detection.className).toLowerCase()
+            );
+
+
+        /*
+            Same zone + same object
+        */
+
+        if (
+            sameZone &&
+            sameClass
         ) {
 
-            /*
-            Safety check in case old incident
-            data does not contain coordinates.
-            */
-
-            if (
-                incidentCamera.latitude == null ||
-                incidentCamera.longitude == null
-            ) {
-                continue;
-            }
-
-
-            const distance =
-
-                getDistanceInKm(
-
-                    camera.latitude,
-                    camera.longitude,
-
-                    incidentCamera.latitude,
-                    incidentCamera.longitude
-
-                );
-
-
-            if (
-                distance <=
-                MAX_CAMERA_DISTANCE_KM
-            ) {
-
-                return incident;
-
-            }
+            return incident;
 
         }
 
@@ -167,8 +101,7 @@ export function findRelatedIncident(
 
 
 /*
-UPDATE AN EXISTING INCIDENT
-WITH A NEW DETECTION
+    UPDATE EXISTING INCIDENT
 */
 
 export function updateIncident(
@@ -179,36 +112,37 @@ export function updateIncident(
 ) {
 
     /*
-    CHECK WHETHER THIS CAMERA
-    IS ALREADY PART OF THE INCIDENT
+        Add detection
     */
 
-    const cameraAlreadyExists =
+    const updatedDetections = [
 
-        incident.cameras.some(
+        detection,
 
-            (item) =>
+        ...(incident.detections || [])
 
-                item.cameraId ===
-                camera.id
-
-        );
+    ].slice(0, 100);
 
 
     /*
-    ADD CAMERA ONLY IF IT
-    DOES NOT ALREADY EXIST
+        Add camera if not already present
     */
 
-    const updatedCameras =
+    const existingCamera =
+        (incident.cameras || []).some(
+            (item) =>
+                item.cameraId === camera.id
+        );
 
-        cameraAlreadyExists
+
+    const updatedCameras =
+        existingCamera
 
             ? incident.cameras
 
             : [
 
-                ...incident.cameras,
+                ...(incident.cameras || []),
 
                 {
 
@@ -233,30 +167,23 @@ export function updateIncident(
 
 
     /*
-    CHECK WHETHER THE ZONE
-    IS ALREADY PART OF INCIDENT
+        Add zone if not already present
     */
 
-    const existingZones =
-        incident.zones || [];
-
-
-    const zoneAlreadyExists =
-
-        existingZones.includes(
+    const existingZone =
+        (incident.zones || []).includes(
             camera.zone
         );
 
 
     const updatedZones =
+        existingZone
 
-        zoneAlreadyExists
-
-            ? existingZones
+            ? incident.zones
 
             : [
 
-                ...existingZones,
+                ...(incident.zones || []),
 
                 camera.zone
 
@@ -264,58 +191,70 @@ export function updateIncident(
 
 
     /*
-    KEEP THE HIGHEST SEVERITY
+        Keep the highest severity
     */
 
-    const updatedSeverity =
+    const severityRank = {
 
-        getHigherSeverity(
+        MEDIUM: 1,
 
-            incident.severity,
+        HIGH: 2,
 
+        CRITICAL: 3
+
+    };
+
+
+    const currentRank =
+        severityRank[
+            incident.severity
+        ] || 1;
+
+
+    const newRank =
+        severityRank[
             assessment.severity
+        ] || 1;
 
-        );
+
+    const finalSeverity =
+        newRank > currentRank
+
+            ? assessment.severity
+
+            : incident.severity;
 
 
     /*
-    KEEP THE HIGHEST
-    PRIORITY SCORE
+        Keep highest priority score
     */
 
-    const updatedPriorityScore =
-
+    const finalPriorityScore =
         Math.max(
 
-            incident.priorityScore,
+            incident.priorityScore || 0,
 
-            assessment.priorityScore
+            assessment.priorityScore || 0
 
         );
 
 
     /*
-    ADD NEW DETECTION
+        Return updated incident
     */
-
-    const updatedDetections = [
-
-        detection,
-
-        ...incident.detections
-
-    ];
-
 
     return {
 
         ...incident,
 
         severity:
-            updatedSeverity,
+            finalSeverity,
 
         priorityScore:
-            updatedPriorityScore,
+            finalPriorityScore,
+
+        status:
+            "ACTIVE",
 
         cameras:
             updatedCameras,
@@ -327,49 +266,11 @@ export function updateIncident(
             updatedDetections,
 
         lastUpdated:
-            detection.timestamp,
+            Date.now(),
 
         description:
-
-            `${updatedCameras.length} camera(s) ` +
-
-            `reported related activity across ` +
-
-            `${updatedZones.length} zone(s).`
+            assessment.reason
 
     };
-
-}
-
-
-/*
-COMPARE SEVERITY LEVELS
-AND RETURN THE HIGHER ONE
-*/
-
-function getHigherSeverity(
-    first,
-    second
-) {
-
-    const severityLevels = {
-
-        LOW: 1,
-
-        MEDIUM: 2,
-
-        HIGH: 3,
-
-        CRITICAL: 4
-
-    };
-
-
-    return severityLevels[second] >
-        severityLevels[first]
-
-        ? second
-
-        : first;
 
 }

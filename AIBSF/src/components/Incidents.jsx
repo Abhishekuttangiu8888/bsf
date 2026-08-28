@@ -3,19 +3,27 @@ import styles from "./Incidents.module.css";
 import { useSurveillance } from "../context/SurveillanceContext";
 
 function Incidents() {
+    const { incidents } = useSurveillance();
 
-    const {
-        incidents,
-        threats,
-        acknowledgeThreat
-    } = useSurveillance();
+    const [selectedIncident, setSelectedIncident] = useState(null);
 
-    const [selectedIncident, setSelectedIncident] =
-        useState(null);
+    const activeIncidents = incidents.filter(
+        (incident) => incident.status === "ACTIVE"
+    );
 
+    const criticalIncidents = incidents.filter(
+        (incident) => incident.severity === "CRITICAL"
+    );
+
+    const highIncidents = incidents.filter(
+        (incident) => incident.severity === "HIGH"
+    );
+
+    const mediumIncidents = incidents.filter(
+        (incident) => incident.severity === "MEDIUM"
+    );
 
     const getSeverityClass = (severity) => {
-
         if (severity === "CRITICAL") {
             return styles.critical;
         }
@@ -25,115 +33,25 @@ function Incidents() {
         }
 
         return styles.medium;
-
     };
-
-
-    const getStatusClass = (status) => {
-
-        if (status === "ACTIVE") {
-            return styles.activeStatus;
-        }
-
-        if (status === "ACKNOWLEDGED") {
-            return styles.acknowledgedStatus;
-        }
-
-        return styles.resolvedStatus;
-
-    };
-
-
-    const formatTime = (timestamp) => {
-
-        if (!timestamp) {
-            return "—";
-        }
-
-        return new Date(timestamp)
-            .toLocaleString();
-
-    };
-
-
-    const activeIncidents =
-        incidents.filter(
-            (incident) =>
-                incident.status === "ACTIVE"
-        );
-
-
-    const criticalIncidents =
-        incidents.filter(
-            (incident) =>
-                incident.severity === "CRITICAL"
-        );
-
-
-    const totalDetections =
-        incidents.reduce(
-            (total, incident) =>
-                total +
-                incident.detections.length,
-            0
-        );
-
-
-    const handleAcknowledgeIncident = (
-        incident
-    ) => {
-
-        const relatedCameraIds =
-            incident.cameras.map(
-                (camera) =>
-                    camera.cameraId
-            );
-
-
-        threats
-            .filter(
-                (threat) =>
-
-                    relatedCameraIds.includes(
-                        threat.cameraId
-                    ) &&
-
-                    threat.status === "ACTIVE"
-            )
-            .forEach(
-                (threat) =>
-                    acknowledgeThreat(
-                        threat.id
-                    )
-            );
-
-    };
-
 
     return (
-
-        <div className={styles.incidents}>
-
+        <div className={styles.incidentsPage}>
 
             {/* ================= HEADER ================= */}
 
             <div className={styles.top}>
 
                 <div>
-
-                    <h2>
-                        INCIDENT MANAGEMENT
-                    </h2>
+                    <h2>INCIDENT MANAGEMENT</h2>
 
                     <p>
-                        Correlated security incidents from AI detections
+                        Monitor and investigate correlated security incidents
                     </p>
-
                 </div>
 
-
-                <div className={styles.liveStatus}>
-                    ● INCIDENT MONITORING ACTIVE
+                <div className={styles.systemStatus}>
+                    ● INCIDENT TRACKING ACTIVE
                 </div>
 
             </div>
@@ -143,95 +61,72 @@ function Incidents() {
 
             <div className={styles.stats}>
 
-
                 <div className={styles.statCard}>
-
-                    <span>
-                        TOTAL INCIDENTS
-                    </span>
+                    <span>TOTAL INCIDENTS</span>
 
                     <h3>
                         {incidents.length}
                     </h3>
 
                     <p>
-                        AI correlated incidents
+                        All detected incidents
                     </p>
-
                 </div>
 
 
                 <div className={styles.statCard}>
-
-                    <span>
-                        ACTIVE
-                    </span>
+                    <span>ACTIVE</span>
 
                     <h3 className={styles.activeNumber}>
                         {activeIncidents.length}
                     </h3>
 
                     <p>
-                        Require attention
+                        Currently under monitoring
                     </p>
-
                 </div>
 
 
                 <div className={styles.statCard}>
-
-                    <span>
-                        CRITICAL
-                    </span>
+                    <span>CRITICAL</span>
 
                     <h3 className={styles.criticalNumber}>
                         {criticalIncidents.length}
                     </h3>
 
                     <p>
-                        High risk incidents
+                        Immediate attention required
                     </p>
-
                 </div>
 
 
                 <div className={styles.statCard}>
+                    <span>HIGH PRIORITY</span>
 
-                    <span>
-                        TOTAL DETECTIONS
-                    </span>
-
-                    <h3>
-                        {totalDetections}
+                    <h3 className={styles.highNumber}>
+                        {highIncidents.length}
                     </h3>
 
                     <p>
-                        Linked AI detections
+                        Requires investigation
                     </p>
-
                 </div>
-
 
             </div>
 
 
-            {/* ================= INCIDENT LIST ================= */}
+            {/* ================= INCIDENT PANEL ================= */}
 
             <div className={styles.incidentPanel}>
-
 
                 <div className={styles.panelHeader}>
 
                     <div>
-
-                        <h3>
-                            🚨 CORRELATED INCIDENTS
-                        </h3>
+                        <h3>🚨 ACTIVE INCIDENTS</h3>
 
                         <p>
-                            Multiple AI detections grouped into security incidents
+                            Multi-camera correlated security events
                         </p>
-
                     </div>
 
                     <span>
@@ -241,7 +136,110 @@ function Incidents() {
                 </div>
 
 
+                {/* ================= INCIDENT LIST ================= */}
+
                 <div className={styles.incidentList}>
+
+                    {incidents.map((incident) => (
+
+                        <div
+                            key={incident.id}
+                            className={styles.incidentItem}
+                        >
+
+                            <div className={styles.incidentIcon}>
+                                🚨
+                            </div>
+
+
+                            <div className={styles.incidentInfo}>
+
+                                <div
+                                    className={
+                                        styles.incidentTitleRow
+                                    }
+                                >
+
+                                    <div>
+                                        <h4>
+                                            {incident.title}
+                                        </h4>
+
+                                        <small>
+                                            {incident.id}
+                                        </small>
+                                    </div>
+
+
+                                    <span
+                                        className={
+                                            getSeverityClass(
+                                                incident.severity
+                                            )
+                                        }
+                                    >
+                                        {incident.severity}
+                                    </span>
+
+                                </div>
+
+
+                                <p>
+                                    📍 {incident.location}
+                                </p>
+
+
+                                <div className={styles.meta}>
+
+                                    <span>
+                                        📹 {
+                                            incident.cameras?.length || 0
+                                        } Camera(s)
+                                    </span>
+
+                                    <span>
+                                        🔍 {
+                                            incident.detections?.length || 0
+                                        } Detection(s)
+                                    </span>
+
+                                    <span>
+                                        📡 {
+                                            incident.zones?.length || 0
+                                        } Zone(s)
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className={styles.incidentStatus}>
+
+                                <span>
+                                    ● {incident.status}
+                                </span>
+
+                            </div>
+
+
+                            <div className={styles.actions}>
+
+                                <button
+                                    onClick={() =>
+                                        setSelectedIncident(
+                                            incident
+                                        )
+                                    }
+                                >
+                                    VIEW
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    ))}
 
 
                     {incidents.length === 0 && (
@@ -257,158 +255,21 @@ function Incidents() {
                             </h3>
 
                             <p>
-                                AI correlated incidents will appear here automatically.
+                                AI-detected threats will automatically
+                                create incidents when related activity
+                                is detected.
                             </p>
 
                         </div>
 
                     )}
 
-
-                    {incidents.map((incident) => (
-
-                        <div
-                            className={styles.incidentItem}
-                            key={incident.id}
-                        >
-
-
-                            <div className={styles.incidentMain}>
-
-
-                                <div
-                                    className={
-                                        styles.incidentIcon
-                                    }
-                                >
-                                    🚨
-                                </div>
-
-
-                                <div
-                                    className={
-                                        styles.incidentInfo
-                                    }
-                                >
-
-
-                                    <div
-                                        className={
-                                            styles.incidentTitle
-                                        }
-                                    >
-
-                                        <div>
-
-                                            <h4>
-                                                {incident.title}
-                                            </h4>
-
-                                            <small>
-                                                {incident.id}
-                                            </small>
-
-                                        </div>
-
-
-                                        <span
-                                            className={
-                                                getSeverityClass(
-                                                    incident.severity
-                                                )
-                                            }
-                                        >
-                                            {incident.severity}
-                                        </span>
-
-                                    </div>
-
-
-                                    <p>
-                                        📍 {incident.location}
-                                    </p>
-
-
-                                    <div
-                                        className={
-                                            styles.incidentMeta
-                                        }
-                                    >
-
-                                        <span>
-                                            📹 {incident.cameras.length} Camera
-                                            {incident.cameras.length !== 1
-                                                ? "s"
-                                                : ""}
-                                        </span>
-
-                                        <span>
-                                            🎯 {incident.detections.length} Detection
-                                            {incident.detections.length !== 1
-                                                ? "s"
-                                                : ""}
-                                        </span>
-
-                                        <span>
-                                            🕒 {formatTime(
-                                                incident.lastUpdated
-                                            )}
-                                        </span>
-
-                                    </div>
-
-
-                                </div>
-
-
-                            </div>
-
-
-                            <div
-                                className={
-                                    styles.incidentRight
-                                }
-                            >
-
-                                <span
-                                    className={
-                                        getStatusClass(
-                                            incident.status
-                                        )
-                                    }
-                                >
-                                    ● {incident.status}
-                                </span>
-
-
-                                <button
-                                    className={
-                                        styles.viewButton
-                                    }
-                                    onClick={() =>
-                                        setSelectedIncident(
-                                            incident
-                                        )
-                                    }
-                                >
-                                    VIEW DETAILS
-                                </button>
-
-
-                            </div>
-
-
-                        </div>
-
-                    ))}
-
-
                 </div>
 
             </div>
 
 
-            {/* ================= INCIDENT DETAILS ================= */}
+            {/* ================= DETAILS MODAL ================= */}
 
             {selectedIncident && (
 
@@ -426,7 +287,6 @@ function Incidents() {
                         }
                     >
 
-
                         <button
                             className={styles.closeButton}
                             onClick={() =>
@@ -437,14 +297,12 @@ function Incidents() {
                         </button>
 
 
-                        <div
-                            className={styles.modalHeader}
-                        >
+                        <div className={styles.modalHeader}>
 
                             <div>
 
-                                <span>
-                                    INCIDENT DETAILS
+                                <span className={styles.incidentId}>
+                                    {selectedIncident.id}
                                 </span>
 
                                 <h2>
@@ -452,7 +310,9 @@ function Incidents() {
                                 </h2>
 
                                 <p>
-                                    {selectedIncident.id}
+                                    📍 {
+                                        selectedIncident.location
+                                    }
                                 </p>
 
                             </div>
@@ -471,14 +331,10 @@ function Incidents() {
                         </div>
 
 
-                        <div
-                            className={
-                                styles.description
-                            }
-                        >
+                        <div className={styles.description}>
 
                             <span>
-                                AI ANALYSIS
+                                AI INCIDENT ANALYSIS
                             </span>
 
                             <p>
@@ -488,11 +344,7 @@ function Incidents() {
                         </div>
 
 
-                        <div
-                            className={
-                                styles.detailsGrid
-                            }
-                        >
+                        <div className={styles.detailsGrid}>
 
                             <div>
 
@@ -500,14 +352,10 @@ function Incidents() {
                                     STATUS
                                 </span>
 
-                                <strong
-                                    className={
-                                        getStatusClass(
-                                            selectedIncident.status
-                                        )
+                                <strong>
+                                    ● {
+                                        selectedIncident.status
                                     }
-                                >
-                                    ● {selectedIncident.status}
                                 </strong>
 
                             </div>
@@ -516,24 +364,13 @@ function Incidents() {
                             <div>
 
                                 <span>
-                                    LOCATION
+                                    PRIORITY SCORE
                                 </span>
 
                                 <strong>
-                                    {selectedIncident.location}
-                                </strong>
-
-                            </div>
-
-
-                            <div>
-
-                                <span>
-                                    DETECTIONS
-                                </span>
-
-                                <strong>
-                                    {selectedIncident.detections.length}
+                                    {
+                                        selectedIncident.priorityScore
+                                    }
                                 </strong>
 
                             </div>
@@ -546,43 +383,53 @@ function Incidents() {
                                 </span>
 
                                 <strong>
-                                    {selectedIncident.cameras.length}
+                                    {
+                                        selectedIncident.cameras
+                                            ?.length || 0
+                                    }
                                 </strong>
 
                             </div>
 
+
+                            <div>
+
+                                <span>
+                                    DETECTIONS
+                                </span>
+
+                                <strong>
+                                    {
+                                        selectedIncident.detections
+                                            ?.length || 0
+                                    }
+                                </strong>
+
+                            </div>
 
                         </div>
 
 
                         {/* ================= CAMERAS ================= */}
 
-                        <div
-                            className={
-                                styles.section
-                            }
-                        >
+                        <div className={styles.section}>
 
                             <h3>
-                                📹 RELATED CAMERAS
+                                📹 INVOLVED CAMERAS
                             </h3>
 
 
-                            <div
-                                className={
-                                    styles.cameraList
-                                }
-                            >
+                            <div className={styles.cameraList}>
 
-                                {selectedIncident.cameras.map(
+                                {selectedIncident.cameras?.map(
                                     (camera) => (
 
                                         <div
-                                            className={
-                                                styles.cameraCard
-                                            }
                                             key={
                                                 camera.cameraId
+                                            }
+                                            className={
+                                                styles.cameraCard
                                             }
                                         >
 
@@ -608,61 +455,50 @@ function Incidents() {
 
                         {/* ================= DETECTIONS ================= */}
 
-                        <div
-                            className={
-                                styles.section
-                            }
-                        >
+                        <div className={styles.section}>
 
                             <h3>
-                                🎯 DETECTION HISTORY
+                                🔍 DETECTION TIMELINE
                             </h3>
 
 
-                            <div
-                                className={
-                                    styles.detectionList
-                                }
-                            >
+                            <div className={styles.detectionList}>
 
-                                {selectedIncident.detections.map(
+                                {selectedIncident.detections?.map(
                                     (detection) => (
 
                                         <div
+                                            key={detection.id}
                                             className={
                                                 styles.detectionItem
-                                            }
-                                            key={
-                                                detection.id
                                             }
                                         >
 
                                             <div>
 
                                                 <strong>
-                                                    {detection.className}
+                                                    {
+                                                        detection.className
+                                                    }
                                                 </strong>
 
-                                                <p>
-                                                    {detection.camera}
-                                                </p>
+                                                <span>
+                                                    📹 {
+                                                        detection.camera
+                                                    }
+                                                </span>
 
                                             </div>
 
 
-                                            <div>
-
-                                                <strong>
-                                                    {(
-                                                        detection.confidence * 100
-                                                    ).toFixed(1)}%
-                                                </strong>
-
-                                                <p>
-                                                    {detection.time}
-                                                </p>
-
-                                            </div>
+                                            <span>
+                                                {
+                                                    (
+                                                        detection.confidence *
+                                                        100
+                                                    ).toFixed(1)
+                                                }%
+                                            </span>
 
                                         </div>
 
@@ -674,47 +510,14 @@ function Incidents() {
                         </div>
 
 
-                        {/* ================= ACTIONS ================= */}
-
-                        <div
-                            className={
-                                styles.modalActions
+                        <button
+                            className={styles.closeModalButton}
+                            onClick={() =>
+                                setSelectedIncident(null)
                             }
                         >
-
-                            {selectedIncident.status ===
-                                "ACTIVE" && (
-
-                                <button
-                                    className={
-                                        styles.acknowledgeButton
-                                    }
-                                    onClick={() =>
-                                        handleAcknowledgeIncident(
-                                            selectedIncident
-                                        )
-                                    }
-                                >
-                                    ✓ ACKNOWLEDGE INCIDENT
-                                </button>
-
-                            )}
-
-
-                            <button
-                                className={
-                                    styles.closeAction
-                                }
-                                onClick={() =>
-                                    setSelectedIncident(null)
-                                }
-                            >
-                                CLOSE
-                            </button>
-
-
-                        </div>
-
+                            CLOSE INCIDENT
+                        </button>
 
                     </div>
 
@@ -723,9 +526,7 @@ function Incidents() {
             )}
 
         </div>
-
     );
-
 }
 
 export default Incidents;

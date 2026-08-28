@@ -1,68 +1,307 @@
+/* =========================================
+   SIDEBAR
+========================================= */
+
 .sidebar {
-    width: 260px;
-    min-width: 260px;
-    min-height: calc(100vh - 80px);
-    padding: 20px 12px;
-    background-color: var(--navy);
-    border-right: 1px solid var(--border-color);
-    box-sizing: border-box;
-}
+    width: 285px;
+    min-width: 285px;
+    height: calc(100vh - 70px);
 
-.first, .second, .third, .fourth { padding: 12px 8px 20px; }
+    background: #071321;
 
-.first, .second, .third {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    margin-bottom: 15px;
-}
-
-.sidebar h4 {
-    margin-bottom: 14px;
-    font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--gold);
-}
-
-.first > div > div,
-.second > div > div,
-.third > div > div {
-    padding: 12px 12px;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.75);
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-.first > div > div:hover,
-.second > div > div:hover,
-.third > div > div:hover {
-    background-color: var(--navy-light);
     color: #ffffff;
+
+    padding: 30px 18px;
+
+    box-sizing: border-box;
+
+    display: flex;
+    flex-direction: column;
+
+    border-right: 1px solid #172638;
+
+    overflow-y: auto;
 }
+
+
+/* =========================================
+   NAVIGATION SECTION
+========================================= */
+
+.section {
+    margin-bottom: 30px;
+}
+
+
+.sectionTitle {
+    font-size: 13px;
+
+    font-weight: 700;
+
+    color: #718096;
+
+    letter-spacing: 1.5px;
+
+    margin: 0 0 12px 8px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================
+   NAVIGATION LIST
+========================================= */
+
+.nav {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 5px;
+
+    width: 100%;
+}
+
+
+/* =========================================
+   NAVIGATION BUTTON
+========================================= */
+
+.navItem {
+    width: 100%;
+
+    min-height: 46px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    padding: 0 14px;
+
+    box-sizing: border-box;
+
+    border: none;
+
+    border-left: 3px solid transparent;
+
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #aebccc;
+
+    font-size: 14px;
+
+    font-weight: 500;
+
+    font-family: inherit;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+/* =========================================
+   ICON
+========================================= */
+
+.icon {
+    width: 22px;
+
+    min-width: 22px;
+
+    height: 22px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    font-size: 17px;
+
+    line-height: 1;
+
+    opacity: 0.9;
+}
+
+
+/* =========================================
+   TEXT
+========================================= */
+
+.label {
+    flex: 1;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================
+   HOVER
+========================================= */
+
+.navItem:hover {
+    background: #101f30;
+
+    color: #ffffff;
+
+    border-left-color: #1e9fd6;
+
+    transform: translateX(2px);
+}
+
+
+/* =========================================
+   ACTIVE NAVIGATION
+========================================= */
 
 .active {
-    background-color: var(--navy-light);
-    border-left: 3px solid var(--gold);
-    color: #ffffff !important;
+    background: linear-gradient(
+        90deg,
+        rgba(22, 165, 222, 0.22),
+        rgba(22, 165, 222, 0.06)
+    );
+
+    color: #27b7f2;
+
+    border-left-color: #27b7f2;
+
+    box-shadow:
+        inset 0 0 20px rgba(39, 183, 242, 0.04);
 }
 
-.fourth h4 { margin-bottom: 16px; }
-.fourth > div > div {
-    padding: 10px 12px;
-    font-size: 11px;
-    letter-spacing: 1px;
-    color: #7fe0ab;
+
+.active .icon {
+    color: #27b7f2;
+
+    opacity: 1;
 }
 
-@media (max-width: 800px) {
-    .sidebar { width: 220px; min-width: 220px; }
+
+.active .label {
+    color: #ffffff;
+
+    font-weight: 600;
 }
 
-@media (max-width: 600px) {
-    .sidebar { width: 70px; min-width: 70px; padding: 15px 8px; }
-    .sidebar h4 { display: none; }
-    .first > div > div,
-    .second > div > div,
-    .third > div > div { font-size: 0; text-align: center; }
+
+/* =========================================
+   SYSTEM SECTION
+========================================= */
+
+.systemSection {
+    margin-top: auto;
+
+    padding-top: 25px;
+
+    border-top: 1px solid #172638;
+}
+
+
+.systemSection .sectionTitle {
+    margin-bottom: 12px;
+}
+
+
+/* =========================================
+   SETTINGS
+========================================= */
+
+.settings {
+    margin-top: 4px;
+}
+
+
+/* =========================================
+   SIDEBAR SCROLLBAR
+========================================= */
+
+.sidebar::-webkit-scrollbar {
+    width: 5px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #071321;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #26384b;
+
+    border-radius: 10px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #3b5268;
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 1000px) {
+
+    .sidebar {
+        width: 240px;
+
+        min-width: 240px;
+
+        padding: 25px 14px;
+    }
+
+    .navItem {
+        font-size: 13px;
+
+        padding: 0 11px;
+    }
+
+    .icon {
+        font-size: 16px;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .sidebar {
+        width: 220px;
+
+        min-width: 220px;
+
+        padding: 20px 10px;
+    }
+
+    .sectionTitle {
+        font-size: 11px;
+    }
+
+    .navItem {
+        min-height: 43px;
+
+        gap: 9px;
+
+        font-size: 12px;
+    }
+
+    .icon {
+        width: 20px;
+
+        min-width: 20px;
+
+        font-size: 15px;
+    }
 }
