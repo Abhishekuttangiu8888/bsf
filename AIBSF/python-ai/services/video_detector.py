@@ -1,10 +1,12 @@
-import cv2
 from ultralytics import YOLO
+import cv2
+from collections import Counter
 
 
-class VideoDetector:
+class YOLOVideoDetector:
 
     def __init__(self):
+
         print("Loading YOLO video detection model...")
 
         self.model = YOLO("yolo26n.pt")
@@ -12,25 +14,23 @@ class VideoDetector:
         print("YOLO video detection model loaded successfully.")
 
 
-    def process_video(self, video_path):
+    def detect_video(self, video_path):
 
-        cap = cv2.VideoCapture(video_path)
+        video = cv2.VideoCapture(video_path)
 
-        if not cap.isOpened():
+        # Total detections across the complete video
+        detected_objects = []
 
-            return {
-                "success": False,
-                "message": "Could not open video"
-            }
-
+        # Stores the highest number of each object
+        # visible at the same time in a single frame
+        max_objects_in_frame = {}
 
         total_frames = 0
 
-        detection_summary = {}
 
         while True:
 
-            success, frame = cap.read()
+            success, frame = video.read()
 
             if not success:
                 break
@@ -39,44 +39,101 @@ class VideoDetector:
             total_frames += 1
 
 
+            # Run YOLO detection
+
             results = self.model(
                 frame,
                 verbose=False
             )
 
 
+            # Count objects in the CURRENT frame
+
+            frame_objects = []
+
+
             for result in results:
 
                 for box in result.boxes:
 
-                    class_id = int(box.cls[0])
+                    class_id = int(
+                        box.cls[0]
+                    )
 
-                    class_name = self.model.names[class_id]
-
-                    confidence = float(box.conf[0])
-
-
-                    if confidence < 0.6:
-                        continue
+                    class_name = self.model.names[
+                        class_id
+                    ]
 
 
-                    if class_name not in detection_summary:
+                    # Save to total video detections
 
-                        detection_summary[class_name] = 0
+                    detected_objects.append(
+                        class_name
+                    )
 
 
-                    detection_summary[class_name] += 1
+                    # Save to current frame detections
+
+                    frame_objects.append(
+                        class_name
+                    )
 
 
-        cap.release()
+            # Count objects in this frame
+
+            frame_counts = Counter(
+                frame_objects
+            )
+
+
+            # Update maximum objects visible
+            # at the same time
+
+            for class_name, count in frame_counts.items():
+
+                current_max = (
+                    max_objects_in_frame.get(
+                        class_name,
+                        0
+                    )
+                )
+
+
+                if count > current_max:
+
+                    max_objects_in_frame[
+                        class_name
+                    ] = count
+
+
+        # Release video
+
+        video.release()
+
+
+        # Count total detections
+        # across all frames
+
+        total_counts = Counter(
+            detected_objects
+        )
 
 
         return {
 
-            "success": True,
-
             "totalFrames": total_frames,
 
-            "detections": detection_summary
+            # Total detections across the video
+            # Useful for analytics
+
+            "detections":
+                dict(total_counts),
+
+
+            # Maximum number of objects
+            # visible simultaneously
+
+            "maxObjectsInSingleFrame":
+                max_objects_in_frame
 
         }

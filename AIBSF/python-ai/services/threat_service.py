@@ -1,165 +1,371 @@
-IGNORED_OBJECTS = [
-    "bird",
-    "cat",
-    "dog",
-    "sheep",
-    "cow",
-    "horse",
-    "elephant",
-    "bear"
-]
-
-
-VEHICLES = [
-    "car",
-    "truck",
-    "bus",
-    "motorcycle"
-]
-
-
-AERIAL_OBJECTS = [
-    "drone",
-    "airplane"
-]
-
-
-def assess_threat(
-    class_name,
-    confidence,
-    detection_count=1
+def analyze_threat(
+    detections,
+    max_objects_in_single_frame,
+    total_frames
 ):
 
-    object_name = class_name.lower()
+    threats = []
+
+    ignored_objects = {}
 
 
-    # ===============================
-    # LOW CONFIDENCE DETECTION
-    # ===============================
+    # =====================================
+    # IGNORED OBJECTS
+    # =====================================
 
-    if confidence < 0.60:
+    ignored_classes = [
 
-        return {
-            "isThreat": False,
-            "severity": "NONE",
-            "priorityScore": 0,
-            "title": "Low Confidence Detection",
-            "reason": "Detection confidence is below 60%"
-        }
+        "bird",
 
+        "cat",
 
-    # ===============================
-    # IGNORE ANIMALS
-    # ===============================
+        "dog",
 
-    if object_name in IGNORED_OBJECTS:
+        "sheep",
 
-        return {
-            "isThreat": False,
-            "severity": "NONE",
-            "priorityScore": 0,
-            "title": "Non-Threat Object",
-            "reason": f"{class_name} detected but classified as non-threat"
-        }
+        "cow",
+
+        "horse",
+
+        "elephant",
+
+        "bear"
+
+    ]
 
 
-    # ===============================
-    # PERSON / GROUP DETECTION
-    # ===============================
+    for object_name in ignored_classes:
 
-    if object_name == "person":
+        if object_name in detections:
 
-        if detection_count >= 10:
-
-            return {
-                "isThreat": True,
-                "severity": "CRITICAL",
-                "priorityScore": 100,
-                "title": "Large Group Movement Detected",
-                "reason": f"{detection_count} persons detected simultaneously"
-            }
+            ignored_objects[
+                object_name
+            ] = detections[
+                object_name
+            ]
 
 
-        if detection_count >= 5:
+    # =====================================
+    # PERSON / GROUP / LARGE ARMY
+    # =====================================
 
-            return {
-                "isThreat": True,
-                "severity": "HIGH",
-                "priorityScore": 85,
-                "title": "Suspicious Group Movement Detected",
-                "reason": f"{detection_count} persons detected simultaneously"
-            }
-
-
-        if detection_count >= 2:
-
-            return {
-                "isThreat": True,
-                "severity": "HIGH",
-                "priorityScore": 70,
-                "title": "Multiple Persons Detected",
-                "reason": f"{detection_count} persons detected simultaneously"
-            }
+    person_count = (
+        max_objects_in_single_frame.get(
+            "person",
+            0
+        )
+    )
 
 
-        return {
-            "isThreat": True,
-            "severity": "MEDIUM",
-            "priorityScore": 50,
-            "title": "Unauthorized Person Detected",
-            "reason": "Single person detected in monitored area"
-        }
+    if person_count >= 10:
+
+        threats.append({
+
+            "type":
+                "LARGE_GROUP_MOVEMENT",
+
+            "severity":
+                "CRITICAL",
+
+            "priorityScore":
+                100,
+
+            "title":
+                "Possible Large Group Movement Detected",
+
+            "description":
+
+                f"AI detected up to "
+                f"{person_count} persons "
+                f"simultaneously in a single frame."
+
+        })
 
 
-    # ===============================
+    elif person_count >= 5:
+
+        threats.append({
+
+            "type":
+                "SUSPICIOUS_GROUP_MOVEMENT",
+
+            "severity":
+                "HIGH",
+
+            "priorityScore":
+                85,
+
+            "title":
+                "Suspicious Group Movement Detected",
+
+            "description":
+
+                f"AI detected up to "
+                f"{person_count} persons "
+                f"simultaneously in a single frame."
+
+        })
+
+
+    elif person_count >= 2:
+
+        threats.append({
+
+            "type":
+                "MULTIPLE_PERSONS",
+
+            "severity":
+                "HIGH",
+
+            "priorityScore":
+                70,
+
+            "title":
+                "Multiple Persons Detected",
+
+            "description":
+
+                f"AI detected "
+                f"{person_count} persons "
+                f"simultaneously."
+
+        })
+
+
+    elif person_count == 1:
+
+        threats.append({
+
+            "type":
+                "PERSON",
+
+            "severity":
+                "MEDIUM",
+
+            "priorityScore":
+                50,
+
+            "title":
+                "Unauthorized Person Detected",
+
+            "description":
+
+                "One person was detected "
+                "inside the monitored area."
+
+        })
+
+
+    # =====================================
     # VEHICLE DETECTION
-    # ===============================
+    # =====================================
 
-    if object_name in VEHICLES:
+    vehicle_classes = [
 
-        if object_name in ["truck", "bus"]:
+        "car",
 
-            return {
-                "isThreat": True,
-                "severity": "CRITICAL",
-                "priorityScore": 90,
-                "title": "Large Vehicle Detected",
-                "reason": f"{class_name} detected in restricted area"
-            }
+        "motorcycle",
 
+        "bus",
 
-        return {
-            "isThreat": True,
-            "severity": "HIGH",
-            "priorityScore": 75,
-            "title": "Suspicious Vehicle Detected",
-            "reason": f"{class_name} detected in restricted area"
-        }
+        "truck",
+
+        "train"
+
+    ]
 
 
-    # ===============================
-    # AERIAL OBJECT
-    # ===============================
+    for vehicle in vehicle_classes:
 
-    if object_name in AERIAL_OBJECTS:
-
-        return {
-            "isThreat": True,
-            "severity": "HIGH",
-            "priorityScore": 85,
-            "title": "Possible Aerial Object Detected",
-            "reason": f"{class_name} detected in monitored airspace"
-        }
+        vehicle_count = (
+            max_objects_in_single_frame.get(
+                vehicle,
+                0
+            )
+        )
 
 
-    # ===============================
-    # UNKNOWN OBJECT
-    # ===============================
+        if vehicle_count == 0:
+
+            continue
+
+
+        # Large vehicles
+
+        if vehicle in [
+
+            "bus",
+
+            "truck",
+
+            "train"
+
+        ]:
+
+            severity = "CRITICAL"
+
+            priority_score = 90
+
+            title = (
+                f"Large Vehicle Detected: "
+                f"{vehicle}"
+            )
+
+        else:
+
+            severity = "HIGH"
+
+            priority_score = 75
+
+            title = (
+                f"Suspicious Vehicle Detected: "
+                f"{vehicle}"
+            )
+
+
+        threats.append({
+
+            "type":
+                "LARGE_VEHICLE"
+                if vehicle in [
+                    "bus",
+                    "truck",
+                    "train"
+                ]
+                else "VEHICLE",
+
+            "severity":
+                severity,
+
+            "priorityScore":
+                priority_score,
+
+            "title":
+                title,
+
+            "description":
+
+                f"AI detected up to "
+                f"{vehicle_count} "
+                f"{vehicle}(s) "
+                f"simultaneously."
+
+        })
+
+
+    # =====================================
+    # AERIAL OBJECT DETECTION
+    # =====================================
+
+    aerial_classes = [
+
+        "drone",
+
+        "airplane",
+
+        "helicopter"
+
+    ]
+
+
+    for aerial_object in aerial_classes:
+
+        aerial_count = (
+            max_objects_in_single_frame.get(
+                aerial_object,
+                0
+            )
+        )
+
+
+        if aerial_count > 0:
+
+            threats.append({
+
+                "type":
+                    "AERIAL_OBJECT",
+
+                "severity":
+                    "HIGH",
+
+                "priorityScore":
+                    85,
+
+                "title":
+                    "Possible Aerial Object Detected",
+
+                "description":
+
+                    f"AI detected "
+                    f"{aerial_count} "
+                    f"{aerial_object}(s) "
+                    f"simultaneously."
+
+            })
+
+
+    # =====================================
+    # FIND HIGHEST SEVERITY
+    # =====================================
+
+    severity_order = {
+
+        "LOW": 1,
+
+        "MEDIUM": 2,
+
+        "HIGH": 3,
+
+        "CRITICAL": 4
+
+    }
+
+
+    highest_severity = "NONE"
+
+
+    if threats:
+
+        highest_threat = max(
+
+            threats,
+
+            key=lambda threat:
+
+                severity_order.get(
+                    threat["severity"],
+                    0
+                )
+
+        )
+
+
+        highest_severity = (
+            highest_threat[
+                "severity"
+            ]
+        )
+
+
+    # =====================================
+    # RETURN FINAL ANALYSIS
+    # =====================================
 
     return {
-        "isThreat": True,
-        "severity": "LOW",
-        "priorityScore": 30,
-        "title": f"{class_name} Detected",
-        "reason": "Unknown object requires monitoring"
+
+        "totalThreats":
+            len(threats),
+
+        "highestSeverity":
+            highest_severity,
+
+        "threats":
+            threats,
+
+        "ignoredObjects":
+            ignored_objects,
+
+        "maxPersonsInSingleFrame":
+            person_count
+
     }

@@ -1,49 +1,49 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
-import cv2
-import numpy as np
-import os
-import shutil
 
 from services.detector import YOLODetector
-from services.video_detector import VideoDetector
+from services.video_detector import YOLOVideoDetector
+from services.threat_service import analyze_threat
 
+import shutil
+import os
+import uuid
+
+
+# =====================================
+# CREATE FASTAPI APPLICATION
+# =====================================
 
 app = FastAPI(
-    title="AI Border Surveillance API"
+    title="AI Border Surveillance Backend"
 )
 
 
-# ==========================================
-# CORS
-# Allows React frontend to connect
-# ==========================================
+# =====================================
+# ENABLE CORS
+# =====================================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:5173"
-    ],
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# ==========================================
+# =====================================
 # LOAD AI MODELS
-# Models are loaded only once when
-# the backend starts
-# ==========================================
+# =====================================
 
 detector = YOLODetector()
 
-video_detector = VideoDetector()
+video_detector = YOLOVideoDetector()
 
 
-# ==========================================
-# HOME API
-# ==========================================
+# =====================================
+# HOME ROUTE
+# =====================================
 
 @app.get("/")
 def home():
@@ -54,124 +54,184 @@ def home():
     }
 
 
-# ==========================================
-# IMAGE DETECTION API
-# ==========================================
+# =====================================
+# IMAGE DETECTION
+# =====================================
 
 @app.post("/detect")
 async def detect_image(
     file: UploadFile = File(...)
 ):
 
-    # Read uploaded image
-
-    image_bytes = await file.read()
-
-
-    # Convert image bytes to numpy array
-
-    np_array = np.frombuffer(
-        image_bytes,
-        np.uint8
+    temp_filename = (
+        f"temp_{uuid.uuid4()}"
     )
 
 
-    # Decode image
+    try:
 
-    frame = cv2.imdecode(
-        np_array,
-        cv2.IMREAD_COLOR
-    )
+        # SAVE UPLOADED IMAGE
+
+        with open(
+            temp_filename,
+            "wb"
+        ) as buffer:
+
+            shutil.copyfileobj(
+                file.file,
+                buffer
+            )
 
 
-    # Check whether image is valid
+        # RUN YOLO IMAGE DETECTION
 
-    if frame is None:
+        results = detector.detect(
+            temp_filename
+        )
+
 
         return {
-            "success": False,
-            "message": "Invalid image file"
+
+            "success": True,
+
+            **results
         }
 
 
-    # Run YOLO detection
+    except Exception as error:
 
-    result = detector.detect(
-        frame
-    )
+        return {
 
+            "success": False,
 
-    # Return detection result
-
-    return {
-
-        "success": True,
-
-        "detections":
-            result["detections"],
-
-        "counts":
-            result["counts"]
-
-    }
+            "message": str(error)
+        }
 
 
-# ==========================================
-# VIDEO DETECTION API
-# ==========================================
+    finally:
+
+        # DELETE TEMPORARY FILE
+
+        if os.path.exists(
+            temp_filename
+        ):
+
+            os.remove(
+                temp_filename
+            )
+
+
+# =====================================
+# VIDEO DETECTION + THREAT ANALYSIS
+# =====================================
 
 @app.post("/detect-video")
 async def detect_video(
     file: UploadFile = File(...)
 ):
 
-    # Create temporary folder
-
-    os.makedirs(
-        "temp",
-        exist_ok=True
+    temp_filename = (
+        f"temp_{uuid.uuid4()}.mp4"
     )
 
 
-    # Create path for uploaded video
+    try:
 
-    video_path = os.path.join(
-        "temp",
-        file.filename
-    )
+        # SAVE UPLOADED VIDEO
+
+        with open(
+            temp_filename,
+            "wb"
+        ) as buffer:
+
+            shutil.copyfileobj(
+                file.file,
+                buffer
+            )
 
 
-    # Save uploaded video temporarily
+        # =================================
+        # RUN YOLO VIDEO DETECTION
+        # =================================
 
-    with open(
-        video_path,
-        "wb"
-    ) as buffer:
-
-        shutil.copyfileobj(
-            file.file,
-            buffer
+        results = video_detector.detect_video(
+            temp_filename
         )
 
 
-    # Run YOLO video detection
+        # =================================
+        # ANALYZE THREATS
+        # =================================
 
-    result = video_detector.process_video(
-        video_path
-    )
+        threat_analysis = analyze_threat(
 
+            detections=
+                results["detections"],
 
-    # Delete temporary video after processing
+            max_objects_in_single_frame=
+                results["maxObjectsInSingleFrame"],
 
-    if os.path.exists(
-        video_path
-    ):
+            total_frames=
+                results["totalFrames"]
 
-        os.remove(
-            video_path
         )
 
 
-    # Return result
+        # =================================
+        # RETURN FINAL RESULT
+        # =================================
 
-    return result
+        return {
+
+            "success": True,
+
+
+            "totalFrames":
+                results["totalFrames"],
+
+
+            # Total detections across
+            # the entire video
+
+            "detections":
+                results["detections"],
+
+
+            # Maximum objects visible
+            # simultaneously in one frame
+
+            "maxObjectsInSingleFrame":
+                results[
+                    "maxObjectsInSingleFrame"
+                ],
+
+
+            # AI threat analysis
+
+            "threatAnalysis":
+                threat_analysis
+
+        }
+
+
+    except Exception as error:
+
+        return {
+
+            "success": False,
+
+            "message": str(error)
+        }
+
+
+    finally:
+
+        # DELETE TEMPORARY VIDEO FILE
+
+        if os.path.exists(
+            temp_filename
+        ):
+
+            os.remove(
+                temp_filename
+            )
