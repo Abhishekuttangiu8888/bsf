@@ -2,28 +2,48 @@ from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 import cv2
 import numpy as np
+import os
+import shutil
 
 from services.detector import YOLODetector
+from services.video_detector import VideoDetector
 
 
-app = FastAPI()
+app = FastAPI(
+    title="AI Border Surveillance API"
+)
 
 
-# Allow React frontend to communicate with backend
+# ==========================================
+# CORS
+# Allows React frontend to connect
+# ==========================================
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=[
+        "http://localhost:5173"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 
-# Load YOLO model once when backend starts
+# ==========================================
+# LOAD AI MODELS
+# Models are loaded only once when
+# the backend starts
+# ==========================================
 
 detector = YOLODetector()
 
+video_detector = VideoDetector()
+
+
+# ==========================================
+# HOME API
+# ==========================================
 
 @app.get("/")
 def home():
@@ -33,6 +53,10 @@ def home():
         "status": "online"
     }
 
+
+# ==========================================
+# IMAGE DETECTION API
+# ==========================================
 
 @app.post("/detect")
 async def detect_image(
@@ -44,7 +68,7 @@ async def detect_image(
     image_bytes = await file.read()
 
 
-    # Convert bytes to numpy array
+    # Convert image bytes to numpy array
 
     np_array = np.frombuffer(
         image_bytes,
@@ -52,7 +76,7 @@ async def detect_image(
     )
 
 
-    # Decode image using OpenCV
+    # Decode image
 
     frame = cv2.imdecode(
         np_array,
@@ -60,7 +84,7 @@ async def detect_image(
     )
 
 
-    # Check if image is valid
+    # Check whether image is valid
 
     if frame is None:
 
@@ -72,8 +96,12 @@ async def detect_image(
 
     # Run YOLO detection
 
-    result = detector.detect(frame)
+    result = detector.detect(
+        frame
+    )
 
+
+    # Return detection result
 
     return {
 
@@ -86,3 +114,64 @@ async def detect_image(
             result["counts"]
 
     }
+
+
+# ==========================================
+# VIDEO DETECTION API
+# ==========================================
+
+@app.post("/detect-video")
+async def detect_video(
+    file: UploadFile = File(...)
+):
+
+    # Create temporary folder
+
+    os.makedirs(
+        "temp",
+        exist_ok=True
+    )
+
+
+    # Create path for uploaded video
+
+    video_path = os.path.join(
+        "temp",
+        file.filename
+    )
+
+
+    # Save uploaded video temporarily
+
+    with open(
+        video_path,
+        "wb"
+    ) as buffer:
+
+        shutil.copyfileobj(
+            file.file,
+            buffer
+        )
+
+
+    # Run YOLO video detection
+
+    result = video_detector.process_video(
+        video_path
+    )
+
+
+    # Delete temporary video after processing
+
+    if os.path.exists(
+        video_path
+    ):
+
+        os.remove(
+            video_path
+        )
+
+
+    # Return result
+
+    return result
