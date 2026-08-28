@@ -1,0 +1,598 @@
+.incidents {
+    width: 100%;
+    min-height: 100%;
+    padding: 28px;
+    color: #e5e7eb;
+}
+
+/* ================= TOP ================= */
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 28px;
+}
+
+.top h2 {
+    margin: 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.top p {
+    margin-top: 6px;
+    color: #94a3b8;
+}
+
+.liveStatus {
+    color: #22c55e;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+/* ================= STATS ================= */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.statCard {
+    background: #111827;
+    border: 1px solid #1f2937;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.statCard span {
+    font-size: 11px;
+    color: #94a3b8;
+    font-weight: 700;
+}
+
+.statCard h3 {
+    margin: 12px 0 6px;
+    font-size: 28px;
+}
+
+.statCard p {
+    margin: 0;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.activeNumber {
+    color: #f59e0b;
+}
+
+.criticalNumber {
+    color: #ef4444;
+}
+
+/* ================= INCIDENT PANEL ================= */
+
+.incidentPanel {
+    background: #111827;
+    border: 1px solid #1f2937;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.panelHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 22px;
+    border-bottom: 1px solid #1f2937;
+}
+
+.panelHeader h3 {
+    margin: 0;
+}
+
+.panelHeader p {
+    margin: 5px 0 0;
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.panelHeader > span {
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ================= INCIDENT ITEM ================= */
+
+.incidentItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 22px;
+    border-bottom: 1px solid #1f2937;
+}
+
+.incidentItem:last-child {
+    border-bottom: none;
+}
+
+.incidentMain {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.incidentIcon {
+    width: 46px;
+    height: 46px;
+    background: #1f2937;
+    border-radius: 10px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 22px;
+}
+
+.incidentInfo {
+    min-width: 400px;
+}
+
+.incidentTitle {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+}
+
+.incidentTitle h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.incidentTitle small {
+    display: block;
+    color: #64748b;
+    margin-top: 3px;
+}
+
+.incidentInfo > p {
+    color: #94a3b8;
+    margin: 8px 0;
+    font-size: 13px;
+}
+
+.incidentMeta {
+    display: flex;
+    gap: 20px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.incidentRight {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+/* ================= BADGES ================= */
+
+.critical,
+.high,
+.medium {
+    padding: 5px 9px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.critical {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.high {
+    background: rgba(249, 115, 22, 0.15);
+    color: #f97316;
+}
+
+.medium {
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+}
+
+/* ================= STATUS ================= */
+
+.activeStatus {
+    color: #ef4444;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.acknowledgedStatus {
+    color: #f59e0b;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.resolvedStatus {
+    color: #22c55e;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+/* ================= BUTTON ================= */
+
+.viewButton {
+    background: #2563eb;
+    border: none;
+    color: white;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.viewButton:hover {
+    background: #1d4ed8;
+}
+
+/* ================= EMPTY ================= */
+
+.emptyState {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.emptyIcon {
+    font-size: 40px;
+    margin-bottom: 15px;
+}
+
+.emptyState h3 {
+    margin: 0;
+}
+
+.emptyState p {
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ================= MODAL ================= */
+
+.overlay {
+    position: fixed;
+    inset: 0;
+
+    background: rgba(0, 0, 0, 0.75);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    z-index: 1000;
+
+    padding: 20px;
+}
+
+.modal {
+    position: relative;
+
+    width: 750px;
+    max-width: 100%;
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    background: #111827;
+
+    border: 1px solid #374151;
+
+    border-radius: 14px;
+
+    padding: 28px;
+}
+
+.closeButton {
+    position: absolute;
+
+    right: 18px;
+    top: 18px;
+
+    background: transparent;
+
+    border: none;
+
+    color: #94a3b8;
+
+    font-size: 20px;
+
+    cursor: pointer;
+}
+
+.modalHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    padding-right: 40px;
+
+    margin-bottom: 25px;
+}
+
+.modalHeader span {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.modalHeader h2 {
+    margin: 7px 0;
+}
+
+.modalHeader p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+}
+
+/* ================= DESCRIPTION ================= */
+
+.description {
+    padding: 16px;
+
+    background: #0f172a;
+
+    border-radius: 8px;
+
+    margin-bottom: 20px;
+}
+
+.description span {
+    color: #64748b;
+
+    font-size: 10px;
+
+    font-weight: 700;
+}
+
+.description p {
+    margin-bottom: 0;
+
+    color: #cbd5e1;
+
+    font-size: 14px;
+}
+
+/* ================= DETAILS ================= */
+
+.detailsGrid {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+
+    gap: 12px;
+
+    margin-bottom: 25px;
+}
+
+.detailsGrid > div {
+    background: #0f172a;
+
+    padding: 15px;
+
+    border-radius: 8px;
+}
+
+.detailsGrid span {
+    display: block;
+
+    color: #64748b;
+
+    font-size: 10px;
+
+    margin-bottom: 7px;
+}
+
+.detailsGrid strong {
+    font-size: 13px;
+}
+
+/* ================= SECTIONS ================= */
+
+.section {
+    margin-bottom: 25px;
+}
+
+.section h3 {
+    font-size: 14px;
+
+    margin-bottom: 12px;
+}
+
+/* ================= CAMERAS ================= */
+
+.cameraList {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 10px;
+}
+
+.cameraCard {
+    background: #0f172a;
+
+    padding: 12px 15px;
+
+    border-radius: 8px;
+
+    min-width: 160px;
+}
+
+.cameraCard strong {
+    display: block;
+
+    font-size: 13px;
+}
+
+.cameraCard span {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+/* ================= DETECTIONS ================= */
+
+.detectionList {
+    border: 1px solid #1f2937;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+}
+
+.detectionItem {
+    display: flex;
+
+    justify-content: space-between;
+
+    padding: 14px;
+
+    border-bottom: 1px solid #1f2937;
+}
+
+.detectionItem:last-child {
+    border-bottom: none;
+}
+
+.detectionItem strong {
+    font-size: 13px;
+}
+
+.detectionItem p {
+    margin: 4px 0 0;
+
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+/* ================= ACTIONS ================= */
+
+.modalActions {
+    display: flex;
+
+    justify-content: flex-end;
+
+    gap: 12px;
+
+    border-top: 1px solid #1f2937;
+
+    padding-top: 20px;
+}
+
+.acknowledgeButton {
+    background: #f59e0b;
+
+    color: #111827;
+
+    border: none;
+
+    padding: 11px 16px;
+
+    border-radius: 7px;
+
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+.closeAction {
+    background: #1f2937;
+
+    color: #e5e7eb;
+
+    border: none;
+
+    padding: 11px 16px;
+
+    border-radius: 7px;
+
+    cursor: pointer;
+}
+
+/* ================= RESPONSIVE ================= */
+
+@media (max-width: 900px) {
+
+    .stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .incidentItem {
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .incidentRight {
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+    .incidentInfo {
+        min-width: auto;
+    }
+
+    .detailsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .incidents {
+        padding: 18px;
+    }
+
+    .top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .incidentItem {
+        flex-direction: column;
+    }
+
+    .incidentRight {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .incidentMeta {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .panelHeader {
+        align-items: flex-start;
+        gap: 12px;
+        flex-direction: column;
+    }
+
+    .detailsGrid {
+        grid-template-columns: 1fr;
+    }
+
+}
