@@ -12,97 +12,248 @@ function AIAnalytics() {
 
     /*
     ============================================================
-    DETECTION STATISTICS
+    NORMALIZE CONFIDENCE
+    ============================================================
+
+    Supports:
+
+    0.951
+    95.1
+    "0.951"
+    "95.1%"
+    */
+
+    const normalizeConfidence = (value) => {
+
+        if (value === undefined || value === null) {
+            return 0;
+        }
+
+        let number = Number(
+            String(value).replace("%", "")
+        );
+
+        if (Number.isNaN(number)) {
+            return 0;
+        }
+
+        if (number > 1) {
+            number = number / 100;
+        }
+
+        return Math.max(
+            0,
+            Math.min(number, 1)
+        );
+    };
+
+
+    /*
+    ============================================================
+    NORMALIZE CLASS
     ============================================================
     */
 
-    const statistics = useMemo(() => {
+    const normalizeClass = (value) => {
 
-        const people = detections.filter(
-            (detection) =>
-                detection.className === "person"
-        ).length;
+        return String(
+            value || "unknown"
+        )
+            .toLowerCase()
+            .trim();
 
-
-        const vehicles = detections.filter(
-            (detection) =>
-                [
-                    "car",
-                    "truck",
-                    "bus",
-                    "motorcycle",
-                    "bicycle"
-                ].includes(detection.className)
-        ).length;
+    };
 
 
-        const animals = detections.filter(
-            (detection) =>
-                [
-                    "bird",
-                    "cat",
-                    "dog",
-                    "horse",
-                    "sheep",
-                    "cow"
-                ].includes(detection.className)
-        ).length;
+    /*
+    ============================================================
+    UNIQUE ACTIVE DETECTION STREAMS
+    ============================================================
 
+    IMPORTANT:
 
-        const unknown = detections.filter(
-            (detection) =>
-                ![
-                    "person",
-                    "car",
-                    "truck",
-                    "bus",
-                    "motorcycle",
-                    "bicycle",
-                    "bird",
-                    "cat",
-                    "dog",
-                    "horse",
-                    "sheep",
-                    "cow",
-                    "drone",
-                    "airplane"
-                ].includes(detection.className)
-        ).length;
+    YOLO can detect:
 
+    Camera 01 + person
+    Camera 01 + person
+    Camera 01 + person
+    Camera 01 + person
 
-        const totalDetections =
-            detections.length;
+    These are NOT 4 people.
 
+    They are ONE detection stream:
 
-        /*
-        --------------------------------------------------------
-        AVERAGE AI CONFIDENCE
-        --------------------------------------------------------
-        */
+        Camera 01 + person
 
-        let totalConfidence = 0;
+    Therefore:
+
+        key = cameraId + className
+
+    This gives:
+
+        Camera 01 + person
+        Camera 01 + car
+        Camera 02 + person
+
+    as separate streams.
+    */
+
+    const uniqueStreams = useMemo(() => {
+
+        const streamMap = new Map();
+
 
         detections.forEach((detection) => {
 
+            const className =
+                normalizeClass(
+                    detection.className
+                );
+
+
+            const cameraId =
+                detection.cameraId ??
+                detection.camera ??
+                "unknown";
+
+
+            const key =
+                `${cameraId}-${className}`;
+
+
             const confidence =
-                Number(detection.confidence);
+                normalizeConfidence(
+                    detection.confidence
+                );
 
-            if (!Number.isNaN(confidence)) {
 
-                totalConfidence +=
-                    confidence;
+            /*
+            Because detections are inserted newest first,
+            the first detection for a key is the newest one.
+            */
+
+            if (!streamMap.has(key)) {
+
+                streamMap.set(
+                    key,
+                    {
+                        ...detection,
+                        className,
+                        normalizedConfidence:
+                            confidence
+                    }
+                );
 
             }
 
         });
 
 
+        return Array.from(
+            streamMap.values()
+        );
+
+    }, [detections]);
+
+
+    /*
+    ============================================================
+    DETECTION STATISTICS
+    ============================================================
+    */
+
+    const statistics = useMemo(() => {
+
+        const people =
+            uniqueStreams.filter(
+                (detection) =>
+                    detection.className ===
+                    "person"
+            ).length;
+
+
+        const vehicles =
+            uniqueStreams.filter(
+                (detection) =>
+                    [
+                        "car",
+                        "truck",
+                        "bus",
+                        "motorcycle",
+                        "bicycle"
+                    ].includes(
+                        detection.className
+                    )
+            ).length;
+
+
+        const animals =
+            uniqueStreams.filter(
+                (detection) =>
+                    [
+                        "bird",
+                        "cat",
+                        "dog",
+                        "horse",
+                        "sheep",
+                        "cow"
+                    ].includes(
+                        detection.className
+                    )
+            ).length;
+
+
+        const unknown =
+            uniqueStreams.filter(
+                (detection) =>
+                    ![
+                        "person",
+                        "car",
+                        "truck",
+                        "bus",
+                        "motorcycle",
+                        "bicycle",
+                        "bird",
+                        "cat",
+                        "dog",
+                        "horse",
+                        "sheep",
+                        "cow",
+                        "drone",
+                        "airplane"
+                    ].includes(
+                        detection.className
+                    )
+            ).length;
+
+
+        /*
+        --------------------------------------------------------
+        AVERAGE CONFIDENCE
+        --------------------------------------------------------
+        */
+
+        let totalConfidence = 0;
+
+
+        uniqueStreams.forEach(
+            (detection) => {
+
+                totalConfidence +=
+                    detection.normalizedConfidence;
+
+            }
+        );
+
+
         const averageConfidence =
-            totalDetections > 0
+            uniqueStreams.length > 0
+
                 ? (
                     totalConfidence /
-                    totalDetections
+                    uniqueStreams.length
                 ) * 100
+
                 : 0;
 
 
@@ -116,7 +267,8 @@ function AIAnalytics() {
 
             unknown,
 
-            totalDetections,
+            totalStreams:
+                uniqueStreams.length,
 
             averageConfidence,
 
@@ -126,14 +278,14 @@ function AIAnalytics() {
         };
 
     }, [
-        detections,
+        uniqueStreams,
         activeThreats
     ]);
 
 
     /*
     ============================================================
-    BAR WIDTHS
+    BAR WIDTH
     ============================================================
     */
 
@@ -142,7 +294,7 @@ function AIAnalytics() {
     ) => {
 
         const total =
-            statistics.totalDetections;
+            statistics.totalStreams;
 
 
         if (
@@ -164,7 +316,7 @@ function AIAnalytics() {
 
     /*
     ============================================================
-    FORMAT TIME
+    FORMAT LIVE TIME
     ============================================================
     */
 
@@ -177,8 +329,11 @@ function AIAnalytics() {
         ) {
 
             const difference =
-                Date.now() -
-                detection.timestamp;
+                Math.max(
+                    0,
+                    Date.now() -
+                    detection.timestamp
+                );
 
 
             const seconds =
@@ -191,10 +346,7 @@ function AIAnalytics() {
                 seconds < 60
             ) {
 
-                return `${Math.max(
-                    seconds,
-                    0
-                )} sec ago`;
+                return `${seconds} sec ago`;
 
             }
 
@@ -225,14 +377,17 @@ function AIAnalytics() {
         }
 
 
-        return detection?.time || "Recently";
+        return (
+            detection?.time ||
+            "Recently"
+        );
 
     };
 
 
     /*
     ============================================================
-    GET EVENT ICON
+    EVENT ICON
     ============================================================
     */
 
@@ -242,33 +397,46 @@ function AIAnalytics() {
 
         const icons = {
 
-            person: "👤",
+            person:
+                "👤",
 
-            car: "🚗",
+            car:
+                "🚗",
 
-            truck: "🚛",
+            truck:
+                "🚛",
 
-            bus: "🚌",
+            bus:
+                "🚌",
 
-            motorcycle: "🏍️",
+            motorcycle:
+                "🏍️",
 
-            bicycle: "🚲",
+            bicycle:
+                "🚲",
 
-            bird: "🐦",
+            bird:
+                "🐦",
 
-            dog: "🐕",
+            dog:
+                "🐕",
 
-            cat: "🐈",
+            cat:
+                "🐈",
 
-            drone: "🚁",
+            drone:
+                "🚁",
 
-            airplane: "✈️"
+            airplane:
+                "✈️"
 
         };
 
 
         return (
-            icons[className] ||
+            icons[
+                className
+            ] ||
             "🔍"
         );
 
@@ -277,7 +445,7 @@ function AIAnalytics() {
 
     /*
     ============================================================
-    GET EVENT TITLE
+    EVENT TITLE
     ============================================================
     */
 
@@ -289,24 +457,37 @@ function AIAnalytics() {
             detection.isThreat
         ) {
 
-            return (
+            if (
                 detection.severity ===
                 "CRITICAL"
+            ) {
 
-                    ? "Critical Threat Detected"
+                return "Critical Threat Detected";
 
-                    : detection.severity ===
-                      "HIGH"
+            }
 
-                        ? "High Priority Threat Detected"
 
-                        : detection.severity ===
-                          "MEDIUM"
+            if (
+                detection.severity ===
+                "HIGH"
+            ) {
 
-                            ? "Suspicious Activity Detected"
+                return "High Priority Threat Detected";
 
-                            : "AI Threat Detection"
-            );
+            }
+
+
+            if (
+                detection.severity ===
+                "MEDIUM"
+            ) {
+
+                return "Suspicious Activity Detected";
+
+            }
+
+
+            return "AI Threat Detection";
 
         }
 
@@ -361,15 +542,41 @@ function AIAnalytics() {
 
     /*
     ============================================================
-    RECENT EVENTS
+    RECENT UNIQUE AI EVENTS
     ============================================================
+
+    IMPORTANT:
+
+    We DO NOT use:
+
+        detections.slice(0, 8)
+
+    because that would show:
+
+        person
+        person
+        person
+        person
+        person
+
+    Instead we use uniqueStreams.
     */
 
     const recentEvents =
-        detections.slice(
-            0,
-            8
-        );
+        uniqueStreams
+            .sort(
+                (a, b) =>
+                    (
+                        b.timestamp || 0
+                    ) -
+                    (
+                        a.timestamp || 0
+                    )
+            )
+            .slice(
+                0,
+                8
+            );
 
 
     /*
@@ -479,7 +686,7 @@ function AIAnalytics() {
                     </strong>
 
                     <p>
-                        Recorded AI detections
+                        Unique active detection streams
                     </p>
 
                 </div>
@@ -504,7 +711,7 @@ function AIAnalytics() {
                     </strong>
 
                     <p>
-                        Recorded AI detections
+                        Unique active detection streams
                     </p>
 
                 </div>
@@ -542,7 +749,7 @@ function AIAnalytics() {
 
 
             {/* ==================================================
-                MAIN CONTENT
+                MAIN GRID
             ================================================== */}
 
             <div
@@ -637,7 +844,7 @@ function AIAnalytics() {
                                                 statistics.people
                                             )
                                     }}
-                                ></div>
+                                />
 
                             </div>
 
@@ -688,7 +895,7 @@ function AIAnalytics() {
                                                 statistics.vehicles
                                             )
                                     }}
-                                ></div>
+                                />
 
                             </div>
 
@@ -739,7 +946,7 @@ function AIAnalytics() {
                                                 statistics.animals
                                             )
                                     }}
-                                ></div>
+                                />
 
                             </div>
 
@@ -790,7 +997,7 @@ function AIAnalytics() {
                                                 statistics.unknown
                                             )
                                     }}
-                                ></div>
+                                />
 
                             </div>
 
@@ -952,7 +1159,7 @@ function AIAnalytics() {
                         </h3>
 
                         <p>
-                            Latest detections generated by AI
+                            Latest unique detections generated by AI
                         </p>
 
                     </div>
@@ -978,7 +1185,7 @@ function AIAnalytics() {
 
                                 <div
                                     key={
-                                        detection.id
+                                        `${detection.cameraId}-${detection.className}`
                                     }
 
                                     className={
@@ -1036,9 +1243,8 @@ function AIAnalytics() {
 
                                             {
                                                 (
-                                                    Number(
-                                                        detection.confidence
-                                                    ) * 100
+                                                    detection.normalizedConfidence *
+                                                    100
                                                 ).toFixed(
                                                     1
                                                 )
