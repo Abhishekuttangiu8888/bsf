@@ -889,3 +889,782 @@
     }
 
 }
+/* =========================================================
+   LIVE AI DETECTION
+========================================================= */
+
+.aiStatus {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+
+    z-index: 5;
+
+    padding: 6px 10px;
+
+    background-color: rgba(0, 0, 0, 0.8);
+
+    border: 1px solid rgba(0, 220, 120, 0.45);
+
+    border-radius: 5px;
+
+    color: #00d978;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   WAITING FOR AI
+========================================================= */
+
+.waitingAI {
+
+    margin-top: 12px;
+
+    padding: 9px 11px;
+
+    border-radius: 5px;
+
+    background-color: rgba(150, 160, 170, 0.08);
+
+    border: 1px solid var(--border-color);
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* =========================================================
+   NO DETECTION
+========================================================= */
+
+.noDetection {
+
+    margin-top: 12px;
+
+    padding: 9px 11px;
+
+    border-radius: 5px;
+
+    background-color: rgba(120, 130, 140, 0.08);
+
+    border: 1px solid var(--border-color);
+
+    color: var(--text-muted);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* =========================================================
+   DETECTION RESULT
+========================================================= */
+
+.detectionResult {
+
+    margin-top: 12px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+
+}
+
+
+/* =========================================================
+   PERSON DETECTED
+========================================================= */
+
+.personDetected {
+
+    padding: 9px 11px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 70, 70, 0.10);
+
+    border: 1px solid rgba(255, 70, 70, 0.35);
+
+    color: #ff5252;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.6px;
+
+}
+
+
+/* =========================================================
+   PERSON CONFIDENCE
+========================================================= */
+
+.personConfidence {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 7px 10px;
+
+    background-color: var(--bg-page);
+
+    border: 1px solid var(--border-color);
+
+    border-radius: 4px;
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+}
+
+
+.personConfidence strong {
+
+    color: var(--success);
+
+    font-size: 11px;
+
+}
+
+
+/* =========================================================
+   OTHER OBJECT
+========================================================= */
+
+.objectDetected {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 8px 10px;
+
+    background-color: rgba(255, 190, 60, 0.08);
+
+    border: 1px solid rgba(255, 190, 60, 0.25);
+
+    border-radius: 5px;
+
+    color: var(--text-primary);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+.objectDetected strong {
+
+    color: var(--success);
+
+}
+
+
+/* =========================================================
+   AI ERROR
+========================================================= */
+
+.detectionError {
+
+    margin-top: 12px;
+
+    padding: 9px 11px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 70, 70, 0.08);
+
+    border: 1px solid rgba(255, 70, 70, 0.35);
+
+    color: #ff5252;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    word-break: break-word;
+
+}
+
+
+/* =========================================================
+   ENLARGED DETECTION
+========================================================= */
+
+.enlargedDetectionList {
+
+    margin-top: 18px;
+
+    padding-top: 15px;
+
+    border-top: 1px solid var(--border-color);
+
+}
+
+
+.enlargedDetectionList strong {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: var(--text-primary);
+
+    font-size: 12px;
+
+    letter-spacing: 1px;
+
+}
+/* =========================================================
+   LIVE YOLO DETECTION OVERLAY
+========================================================= */
+
+.detectionOverlay {
+    position: absolute;
+
+    left: 12px;
+    bottom: 42px;
+
+    z-index: 10;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 6px;
+}
+
+
+/* =========================================================
+   DETECTION ITEM
+========================================================= */
+
+.detectionItem {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 14px;
+
+    min-width: 145px;
+
+    padding: 7px 10px;
+
+    background-color: rgba(0, 0, 0, 0.88);
+
+    border: 1px solid rgba(255, 70, 70, 0.5);
+
+    border-radius: 5px;
+
+    color: #ff5555;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.4px;
+}
+
+
+.detectionItem strong {
+    color: #ffffff;
+
+    font-size: 10px;
+}
+
+
+/* =========================================================
+   THREAT INFORMATION
+========================================================= */
+
+.threatInfo {
+    display: flex;
+
+    align-items: center;
+
+    gap: 8px;
+
+    margin-top: 12px;
+
+    padding: 8px 10px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 82, 82, 0.08);
+
+    border: 1px solid rgba(255, 82, 82, 0.25);
+
+    color: var(--text-secondary);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+}
+
+
+.threatInfo strong {
+    color: var(--text-primary);
+}
+
+
+/* =========================================================
+   ALERT BADGE
+========================================================= */
+
+.alertBadge {
+    padding: 4px 7px;
+
+    border-radius: 4px;
+
+    background-color: rgba(255, 50, 50, 0.15);
+
+    border: 1px solid rgba(255, 50, 50, 0.4);
+
+    color: #ff5555;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    animation: alertPulse 1.2s infinite;
+}
+
+
+@keyframes alertPulse {
+
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.55;
+    }
+
+    100% {
+        opacity: 1;
+    }
+
+}
+
+
+/* =========================================================
+   NO OBJECT
+========================================================= */
+
+.aiDetectionBadge {
+    position: absolute;
+
+    left: 12px;
+
+    bottom: 42px;
+
+    z-index: 10;
+
+    padding: 6px 9px;
+
+    border-radius: 4px;
+
+    background-color: rgba(0, 0, 0, 0.82);
+
+    border: 1px solid rgba(0, 255, 120, 0.3);
+
+    color: #00d978;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .detectionOverlay {
+
+        left: 10px;
+
+        bottom: 40px;
+
+    }
+
+
+    .detectionItem {
+
+        min-width: 130px;
+
+        font-size: 9px;
+
+    }
+
+
+    .threatInfo {
+
+        flex-wrap: wrap;
+
+    }
+
+}
+/* =========================================================
+   LIVE AI DETECTION
+========================================================= */
+
+.aiStatus {
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
+
+    z-index: 5;
+
+    padding: 6px 10px;
+
+    border-radius: 5px;
+
+    background-color: rgba(0, 0, 0, 0.82);
+
+    border: 1px solid rgba(255, 255, 255, 0.15);
+
+    color: #4ade80;
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+}
+
+
+/* =========================================================
+   DETECTION WAITING
+========================================================= */
+
+.detectionWaiting {
+
+    margin-top: 12px;
+
+    padding: 8px 10px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 193, 7, 0.08);
+
+    border: 1px solid rgba(255, 193, 7, 0.25);
+
+    color: var(--warning);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* =========================================================
+   NO DETECTION
+========================================================= */
+
+.noDetection {
+
+    margin-top: 12px;
+
+    padding: 8px 10px;
+
+    border-radius: 5px;
+
+    background-color: rgba(0, 208, 132, 0.08);
+
+    border: 1px solid rgba(0, 208, 132, 0.25);
+
+    color: var(--success);
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+}
+
+
+/* =========================================================
+   DETECTION LIST
+========================================================= */
+
+.detectionList {
+
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 6px;
+
+    margin-top: 12px;
+
+}
+
+
+/* =========================================================
+   DETECTION TAG
+========================================================= */
+
+.detectionTag {
+
+    padding: 6px 9px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 82, 82, 0.10);
+
+    border: 1px solid rgba(255, 82, 82, 0.35);
+
+    color: #ff6262;
+
+    font-size: 10px;
+
+    font-weight: 800;
+
+    letter-spacing: 0.4px;
+
+}
+
+
+/* =========================================================
+   THREAT LOW
+========================================================= */
+
+.threatLow {
+
+    margin-top: 8px;
+
+    padding: 7px 9px;
+
+    border-radius: 5px;
+
+    background-color: rgba(0, 208, 132, 0.08);
+
+    border: 1px solid rgba(0, 208, 132, 0.25);
+
+    color: var(--success);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   THREAT MEDIUM
+========================================================= */
+
+.threatMedium {
+
+    margin-top: 8px;
+
+    padding: 7px 9px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 193, 7, 0.10);
+
+    border: 1px solid rgba(255, 193, 7, 0.30);
+
+    color: var(--warning);
+
+    font-size: 9px;
+
+    font-weight: 800;
+
+}
+
+
+/* =========================================================
+   THREAT HIGH
+========================================================= */
+
+.threatHigh {
+
+    margin-top: 8px;
+
+    padding: 7px 9px;
+
+    border-radius: 5px;
+
+    background-color: rgba(255, 60, 60, 0.12);
+
+    border: 1px solid rgba(255, 60, 60, 0.40);
+
+    color: var(--critical);
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+/* =========================================================
+   ALERT
+========================================================= */
+
+.alertBox {
+
+    display: flex;
+
+    align-items: flex-start;
+
+    gap: 9px;
+
+    margin-top: 9px;
+
+    padding: 9px 10px;
+
+    border-radius: 5px;
+
+    background-color: rgba(190, 30, 30, 0.14);
+
+    border: 1px solid rgba(190, 30, 30, 0.40);
+
+    color: var(--critical);
+
+}
+
+
+.alertBox > span {
+
+    font-size: 14px;
+
+}
+
+
+.alertBox strong {
+
+    display: block;
+
+    font-size: 9px;
+
+    font-weight: 900;
+
+    letter-spacing: 0.5px;
+
+}
+
+
+.alertBox small {
+
+    display: block;
+
+    margin-top: 3px;
+
+    color: var(--text-secondary);
+
+    font-size: 9px;
+
+    line-height: 1.4;
+
+}
+
+
+/* =========================================================
+   LAST AI SCAN
+========================================================= */
+
+.lastDetection {
+
+    margin-top: 8px;
+
+    color: var(--text-muted);
+
+    font-size: 8px;
+
+    letter-spacing: 0.4px;
+
+}
+
+
+/* =========================================================
+   ENLARGED DETECTION
+========================================================= */
+
+.enlargedDetectionList .detectionList {
+
+    margin-top: 10px;
+
+}
+
+
+.enlargedDetectionList .detectionTag {
+
+    font-size: 11px;
+
+    padding: 7px 10px;
+
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .aiStatus {
+
+        top: 10px;
+
+        right: 10px;
+
+    }
+
+
+    .detectionList {
+
+        gap: 5px;
+
+    }
+
+
+    .detectionTag {
+
+        font-size: 9px;
+
+    }
+
+}

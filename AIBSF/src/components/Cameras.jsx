@@ -13,13 +13,9 @@ import {
 function Cameras() {
 
     const {
-
         cameras,
-
         pendingCameraId,
-
         clearPendingCamera
-
     } = useSurveillance();
 
 
@@ -34,19 +30,26 @@ function Cameras() {
 
 
     /*
+    ============================================================
     AUTOMATICALLY OPEN CAMERA
-    WHEN COMING FROM ALERTS
+    WHEN COMING FROM ALERTS / OTHER PAGES
+    ============================================================
     */
 
     useEffect(() => {
 
-        if (!pendingCameraId) return;
+        if (!pendingCameraId) {
+
+            return;
+
+        }
 
 
         const camera =
             cameras.find(
                 (camera) =>
-                    camera.id === pendingCameraId
+                    Number(camera.id) ===
+                    Number(pendingCameraId)
             );
 
 
@@ -66,9 +69,19 @@ function Cameras() {
     ]);
 
 
-    const getVideo = (
-        cameraId
-    ) => {
+    /*
+    ============================================================
+    CAMERA VIDEO
+    ============================================================
+    
+    Camera 01 → camera1.mp4
+    Camera 02 → camera2.mp4
+    ...
+    Camera 08 → camera8.mp4
+    ============================================================
+    */
+
+    const getVideo = (cameraId) => {
 
         const videos = [
 
@@ -78,38 +91,89 @@ function Cameras() {
 
             "/videos/camera3.mp4",
 
-            "/videos/camera4.mp4"
+            "/videos/camera4.mp4",
+
+            "/videos/camera5.mp4",
+
+            "/videos/camera6.mp4",
+
+            "/videos/camera7.mp4",
+
+            "/videos/camera8.mp4"
 
         ];
 
 
-        return videos[
-            (cameraId - 1) %
-            videos.length
-        ];
+        const index =
+            Number(cameraId) - 1;
+
+
+        if (
+            index < 0 ||
+            index >= videos.length
+        ) {
+
+            return videos[0];
+
+        }
+
+
+        return videos[index];
 
     };
 
 
+    /*
+    ============================================================
+    SEARCH CAMERAS
+    ============================================================
+    */
+
     const filteredCameras =
         cameras.filter(
-            (camera) =>
+            (camera) => {
 
-                camera.name
-                    .toLowerCase()
-                    .includes(
-                        search.toLowerCase()
-                    )
+                const searchText =
+                    search
+                        .toLowerCase()
+                        .trim();
 
-                ||
 
-                camera.location
-                    .toLowerCase()
-                    .includes(
-                        search.toLowerCase()
-                    )
+                if (!searchText) {
+
+                    return true;
+
+                }
+
+
+                return (
+
+                    camera.name
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    camera.location
+                        .toLowerCase()
+                        .includes(searchText)
+
+                    ||
+
+                    String(camera.id)
+                        .includes(searchText)
+
+                );
+
+            }
         );
 
+
+    /*
+    ============================================================
+    CAMERA COUNTS
+    ============================================================
+    */
 
     const activeCount =
         cameras.filter(
@@ -132,14 +196,34 @@ function Cameras() {
         ).length;
 
 
+    /*
+    ============================================================
+    CLOSE CAMERA MODAL
+    ============================================================
+    */
+
+    const closeCamera = () => {
+
+        setSelectedCamera(null);
+
+    };
+
+
+    /*
+    ============================================================
+    RENDER
+    ============================================================
+    */
+
     return (
 
         <div
             className={styles.cameras}
         >
 
-
-            {/* ================= TOP ================= */}
+            {/* ==================================================
+                TOP HEADER
+            ================================================== */}
 
             <div
                 className={styles.top}
@@ -169,11 +253,15 @@ function Cameras() {
             </div>
 
 
-            {/* ================= SUMMARY ================= */}
+            {/* ==================================================
+                SUMMARY CARDS
+            ================================================== */}
 
             <div
                 className={styles.summary}
             >
+
+                {/* TOTAL */}
 
                 <div
                     className={styles.summaryCard}
@@ -194,6 +282,8 @@ function Cameras() {
                 </div>
 
 
+                {/* ACTIVE */}
+
                 <div
                     className={styles.summaryCard}
                 >
@@ -205,9 +295,7 @@ function Cameras() {
                     <strong
                         className={styles.green}
                     >
-
                         {activeCount}
-
                     </strong>
 
                     <p>
@@ -216,6 +304,8 @@ function Cameras() {
 
                 </div>
 
+
+                {/* WARNING */}
 
                 <div
                     className={styles.summaryCard}
@@ -228,9 +318,7 @@ function Cameras() {
                     <strong
                         className={styles.yellow}
                     >
-
                         {warningCount}
-
                     </strong>
 
                     <p>
@@ -239,6 +327,8 @@ function Cameras() {
 
                 </div>
 
+
+                {/* OFFLINE */}
 
                 <div
                     className={styles.summaryCard}
@@ -251,9 +341,7 @@ function Cameras() {
                     <strong
                         className={styles.red}
                     >
-
                         {offlineCount}
-
                     </strong>
 
                     <p>
@@ -265,7 +353,9 @@ function Cameras() {
             </div>
 
 
-            {/* ================= TOOLBAR ================= */}
+            {/* ==================================================
+                TOOLBAR
+            ================================================== */}
 
             <div
                 className={styles.toolbar}
@@ -284,6 +374,8 @@ function Cameras() {
                 </div>
 
 
+                {/* SEARCH */}
+
                 <div
                     className={styles.searchBox}
                 >
@@ -291,7 +383,6 @@ function Cameras() {
                     <span>
                         🔍
                     </span>
-
 
                     <input
                         type="text"
@@ -309,11 +400,15 @@ function Cameras() {
             </div>
 
 
-            {/* ================= CAMERA TABLE ================= */}
+            {/* ==================================================
+                CAMERA TABLE
+            ================================================== */}
 
             <div
                 className={styles.tableContainer}
             >
+
+                {/* TABLE HEADER */}
 
                 <div
                     className={styles.tableHeader}
@@ -342,6 +437,8 @@ function Cameras() {
                 </div>
 
 
+                {/* CAMERA ROWS */}
+
                 {filteredCameras.map(
                     (camera) => (
 
@@ -349,6 +446,8 @@ function Cameras() {
                             className={styles.cameraRow}
                             key={camera.id}
                         >
+
+                            {/* CAMERA */}
 
                             <div
                                 className={styles.cameraName}
@@ -369,7 +468,6 @@ function Cameras() {
                                         {camera.name}
                                     </strong>
 
-
                                     <small>
 
                                         ID: CAM-
@@ -388,6 +486,8 @@ function Cameras() {
                             </div>
 
 
+                            {/* LOCATION */}
+
                             <div
                                 className={styles.location}
                             >
@@ -397,10 +497,13 @@ function Cameras() {
                             </div>
 
 
+                            {/* STATUS */}
+
                             <div>
 
                                 <span
                                     className={
+
                                         camera.status === "ACTIVE"
 
                                             ? styles.active
@@ -410,6 +513,7 @@ function Cameras() {
                                                 ? styles.warning
 
                                                 : styles.offline
+
                                     }
                                 >
 
@@ -420,6 +524,8 @@ function Cameras() {
                             </div>
 
 
+                            {/* LAST UPDATE */}
+
                             <div
                                 className={styles.lastUpdate}
                             >
@@ -428,6 +534,8 @@ function Cameras() {
 
                             </div>
 
+
+                            {/* ACTION */}
 
                             <div>
 
@@ -452,6 +560,8 @@ function Cameras() {
                 )}
 
 
+                {/* NO RESULTS */}
+
                 {filteredCameras.length === 0 && (
 
                     <div
@@ -467,15 +577,15 @@ function Cameras() {
             </div>
 
 
-            {/* ================= CAMERA MODAL ================= */}
+            {/* ==================================================
+                CAMERA DETAILS MODAL
+            ================================================== */}
 
             {selectedCamera && (
 
                 <div
                     className={styles.overlay}
-                    onClick={() =>
-                        setSelectedCamera(null)
-                    }
+                    onClick={closeCamera}
                 >
 
                     <div
@@ -485,11 +595,11 @@ function Cameras() {
                         }
                     >
 
+                        {/* CLOSE */}
+
                         <button
                             className={styles.close}
-                            onClick={() =>
-                                setSelectedCamera(null)
-                            }
+                            onClick={closeCamera}
                         >
 
                             ✕
@@ -497,7 +607,9 @@ function Cameras() {
                         </button>
 
 
-                        {/* LIVE VIDEO */}
+                        {/* ==================================================
+                            LIVE VIDEO
+                        ================================================== */}
 
                         <div
                             className={styles.preview}
@@ -529,7 +641,9 @@ function Cameras() {
                         </div>
 
 
-                        {/* CAMERA NAME */}
+                        {/* ==================================================
+                            CAMERA NAME
+                        ================================================== */}
 
                         <h2>
 
@@ -537,6 +651,8 @@ function Cameras() {
 
                         </h2>
 
+
+                        {/* LOCATION */}
 
                         <p
                             className={
@@ -549,7 +665,9 @@ function Cameras() {
                         </p>
 
 
-                        {/* STATUS */}
+                        {/* ==================================================
+                            STATUS
+                        ================================================== */}
 
                         <div
                             className={
@@ -564,6 +682,7 @@ function Cameras() {
 
                             <strong
                                 className={
+
                                     selectedCamera.status === "ACTIVE"
 
                                         ? styles.green
@@ -573,6 +692,7 @@ function Cameras() {
                                             ? styles.yellow
 
                                             : styles.red
+
                                 }
                             >
 
@@ -583,7 +703,9 @@ function Cameras() {
                         </div>
 
 
-                        {/* LAST UPDATE */}
+                        {/* ==================================================
+                            LAST UPDATE
+                        ================================================== */}
 
                         <div
                             className={
@@ -605,13 +727,74 @@ function Cameras() {
                         </div>
 
 
+                        {/* ==================================================
+                            CAMERA ID
+                        ================================================== */}
+
+                        <div
+                            className={
+                                styles.detailStatus
+                            }
+                        >
+
+                            <span>
+                                CAMERA ID
+                            </span>
+
+
+                            <strong>
+
+                                CAM-
+
+                                {String(
+                                    selectedCamera.id
+                                ).padStart(
+                                    3,
+                                    "0"
+                                )}
+
+                            </strong>
+
+                        </div>
+
+
+                        {/* ==================================================
+                            ZONE
+                        ================================================== */}
+
+                        {selectedCamera.zone && (
+
+                            <div
+                                className={
+                                    styles.detailStatus
+                                }
+                            >
+
+                                <span>
+                                    ZONE
+                                </span>
+
+
+                                <strong>
+
+                                    {selectedCamera.zone}
+
+                                </strong>
+
+                            </div>
+
+                        )}
+
+
+                        {/* ==================================================
+                            CLOSE
+                        ================================================== */}
+
                         <button
                             className={
                                 styles.fullButton
                             }
-                            onClick={() =>
-                                setSelectedCamera(null)
-                            }
+                            onClick={closeCamera}
                         >
 
                             CLOSE CAMERA

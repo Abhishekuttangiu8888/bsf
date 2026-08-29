@@ -15,9 +15,14 @@ import {
 } from "../utils/incidentEngine";
 
 
-const SurveillanceContext =
-    createContext();
+const SurveillanceContext = createContext();
 
+
+/*
+============================================================
+CAMERAS
+============================================================
+*/
 
 const initialCameras = [
 
@@ -27,13 +32,10 @@ const initialCameras = [
         location: "North Border Sector",
         status: "ACTIVE",
         lastUpdate: "Just now",
-
         x: "20%",
         y: "25%",
-
         coverageRadius: 500,
         zone: "NORTH_ZONE",
-
         latitude: 15.8501,
         longitude: 76.2301
     },
@@ -44,13 +46,10 @@ const initialCameras = [
         location: "South Border Sector",
         status: "ACTIVE",
         lastUpdate: "1 min ago",
-
         x: "35%",
         y: "72%",
-
         coverageRadius: 500,
         zone: "SOUTH_ZONE",
-
         latitude: 15.8402,
         longitude: 76.2405
     },
@@ -61,13 +60,10 @@ const initialCameras = [
         location: "East Border Sector",
         status: "WARNING",
         lastUpdate: "2 min ago",
-
         x: "78%",
         y: "35%",
-
         coverageRadius: 600,
         zone: "EAST_ZONE",
-
         latitude: 15.8550,
         longitude: 76.2550
     },
@@ -78,13 +74,10 @@ const initialCameras = [
         location: "West Border Sector",
         status: "OFFLINE",
         lastUpdate: "18 min ago",
-
         x: "18%",
         y: "55%",
-
         coverageRadius: 400,
         zone: "WEST_ZONE",
-
         latitude: 15.8450,
         longitude: 76.2150
     },
@@ -95,13 +88,10 @@ const initialCameras = [
         location: "North-East Border Sector",
         status: "ACTIVE",
         lastUpdate: "Just now",
-
         x: "62%",
         y: "20%",
-
         coverageRadius: 700,
         zone: "NORTH_EAST_ZONE",
-
         latitude: 15.8600,
         longitude: 76.2450
     },
@@ -112,13 +102,10 @@ const initialCameras = [
         location: "South-East Border Sector",
         status: "ACTIVE",
         lastUpdate: "3 min ago",
-
         x: "70%",
         y: "75%",
-
         coverageRadius: 600,
         zone: "SOUTH_EAST_ZONE",
-
         latitude: 15.8350,
         longitude: 76.2500
     },
@@ -129,13 +116,10 @@ const initialCameras = [
         location: "North-West Border Sector",
         status: "ACTIVE",
         lastUpdate: "1 min ago",
-
         x: "40%",
         y: "15%",
-
         coverageRadius: 500,
         zone: "NORTH_WEST_ZONE",
-
         latitude: 15.8600,
         longitude: 76.2200
     },
@@ -146,13 +130,10 @@ const initialCameras = [
         location: "Central Border Sector",
         status: "WARNING",
         lastUpdate: "4 min ago",
-
         x: "50%",
         y: "50%",
-
         coverageRadius: 800,
         zone: "CENTRAL_ZONE",
-
         latitude: 15.8500,
         longitude: 76.2350
     }
@@ -160,101 +141,30 @@ const initialCameras = [
 ];
 
 
-const initialThreats = [
+/*
+============================================================
+NO STATIC THREATS
+============================================================
 
-    {
-        id: 1,
-        title: "Unauthorized Movement",
-        camera: "Camera 03",
-        cameraId: 3,
-        location: "East Border Sector",
-        severity: "CRITICAL",
-        confidence: "94.7%",
-        time: "12:45:32",
-        status: "ACTIVE",
-        investigationStatus: "INVESTIGATING",
+All threats are generated from YOLO detections.
+*/
 
-        description:
-            "AI detected unauthorized movement within the restricted border zone.",
-
-        icon: "⚠",
-
-        x: "58%",
-        y: "45%"
-    },
-
-    {
-        id: 2,
-        title: "Suspicious Vehicle",
-        camera: "Camera 07",
-        cameraId: 7,
-        location: "North Border Sector",
-        severity: "HIGH",
-        confidence: "89.3%",
-        time: "12:42:18",
-        status: "ACTIVE",
-        investigationStatus: "MONITORING",
-
-        description:
-            "A suspicious vehicle was detected moving near the restricted surveillance area.",
-
-        icon: "🚗",
-
-        x: "72%",
-        y: "55%"
-    },
-
-    {
-        id: 3,
-        title: "Unknown Person Detected",
-        camera: "Camera 04",
-        cameraId: 4,
-        location: "West Border Sector",
-        severity: "MEDIUM",
-        confidence: "82.6%",
-        time: "12:38:45",
-        status: "ACTIVE",
-        investigationStatus: "MONITORING",
-
-        description:
-            "An unidentified person was detected inside the monitored zone.",
-
-        icon: "👤"
-    },
-
-    {
-        id: 4,
-        title: "Object Left Behind",
-        camera: "Camera 02",
-        cameraId: 2,
-        location: "South Border Sector",
-        severity: "MEDIUM",
-        confidence: "78.9%",
-        time: "12:34:21",
-        status: "ACTIVE",
-        investigationStatus: "MONITORING",
-
-        description:
-            "AI detected an unattended object near the surveillance perimeter.",
-
-        icon: "📦"
-    }
-
-];
+const initialThreats = [];
 
 
-export function SurveillanceProvider({
-    children
-}) {
+export function SurveillanceProvider({ children }) {
 
     const [cameras, setCameras] =
         useState(initialCameras);
 
+
     const [threats, setThreats] =
         useState(initialThreats);
 
+
     const [detections, setDetections] =
         useState([]);
+
 
     const [incidents, setIncidents] =
         useState([]);
@@ -263,19 +173,50 @@ export function SurveillanceProvider({
     const [activePage, setActivePage] =
         useState("dashboard");
 
+
     const [pendingCameraId, setPendingCameraId] =
         useState(null);
 
 
+    /*
+    ============================================================
+    ID GENERATORS
+    ============================================================
+    */
+
     const nextThreatId =
-        useRef(initialThreats.length + 1);
+        useRef(1);
+
 
     const nextIncidentId =
         useRef(1);
 
 
     /*
-    PREVENT DUPLICATE DETECTIONS
+    ============================================================
+    DUPLICATE DETECTION CONTROL
+    ============================================================
+
+    Same camera + same object should not create a new threat
+    every 3 seconds.
+
+    Example:
+
+    Camera 01 + person
+        ↓
+    Create threat
+
+    Camera 01 + person after 3 sec
+        ↓
+    Update existing threat
+
+    Camera 01 + person after another 3 sec
+        ↓
+    Update existing threat
+
+    Different camera + person
+        ↓
+    New threat
     */
 
     const recentDetectionRef =
@@ -283,8 +224,9 @@ export function SurveillanceProvider({
 
 
     /*
+    ============================================================
     ACKNOWLEDGE THREAT
-    AND UPDATE RELATED INCIDENT
+    ============================================================
     */
 
     const acknowledgeThreat = (id) => {
@@ -292,18 +234,27 @@ export function SurveillanceProvider({
         setThreats((prevThreats) => {
 
             const updatedThreats =
-                prevThreats.map((threat) =>
+                prevThreats.map((threat) => {
 
-                    threat.id === id
+                    if (threat.id !== id) {
 
-                        ? {
-                            ...threat,
-                            status: "ACKNOWLEDGED",
-                            investigationStatus: "ACKNOWLEDGED"
-                        }
+                        return threat;
 
-                        : threat
-                );
+                    }
+
+                    return {
+
+                        ...threat,
+
+                        status:
+                            "ACKNOWLEDGED",
+
+                        investigationStatus:
+                            "ACKNOWLEDGED"
+
+                    };
+
+                });
 
 
             const acknowledgedThreat =
@@ -322,9 +273,8 @@ export function SurveillanceProvider({
                 prevIncidents.map((incident) => {
 
                     const isRelatedIncident =
-                        incident.detections.some(
+                        incident.detections?.some(
                             (detection) =>
-
                                 detection.cameraId ===
                                 acknowledgedThreat?.cameraId
                         );
@@ -337,28 +287,16 @@ export function SurveillanceProvider({
                     }
 
 
-                    /*
-                    FIND ALL THREATS
-                    RELATED TO INCIDENT CAMERAS
-                    */
-
                     const relatedThreats =
                         updatedThreats.filter(
                             (threat) =>
-
-                                incident.cameras.some(
+                                incident.cameras?.some(
                                     (camera) =>
-
                                         camera.cameraId ===
                                         threat.cameraId
                                 )
                         );
 
-
-                    /*
-                    CHECK WHETHER ALL RELATED
-                    THREATS ARE ACKNOWLEDGED
-                    */
 
                     const allAcknowledged =
 
@@ -366,7 +304,6 @@ export function SurveillanceProvider({
 
                         relatedThreats.every(
                             (threat) =>
-
                                 threat.status ===
                                 "ACKNOWLEDGED"
                         );
@@ -377,7 +314,6 @@ export function SurveillanceProvider({
                         ...incident,
 
                         status:
-
                             allAcknowledged
                                 ? "ACKNOWLEDGED"
                                 : "ACTIVE",
@@ -400,7 +336,9 @@ export function SurveillanceProvider({
 
 
     /*
+    ============================================================
     UPDATE CAMERA STATUS
+    ============================================================
     */
 
     const updateCameraStatus = (
@@ -409,48 +347,72 @@ export function SurveillanceProvider({
     ) => {
 
         setCameras((prev) =>
+
             prev.map((camera) =>
+
                 camera.id === id
+
                     ? {
+
                         ...camera,
-                        status: newStatus,
-                        lastUpdate: "Just now"
+
+                        status:
+                            newStatus,
+
+                        lastUpdate:
+                            "Just now"
+
                     }
+
                     : camera
+
             )
+
         );
 
     };
 
 
     /*
+    ============================================================
     OPEN CAMERA LIVE
+    ============================================================
     */
 
     const viewCameraLive = (
         cameraId
     ) => {
 
-        setPendingCameraId(cameraId);
+        setPendingCameraId(
+            cameraId
+        );
 
-        setActivePage("cameras");
+        setActivePage(
+            "cameras"
+        );
 
     };
 
 
     /*
+    ============================================================
     CLEAR PENDING CAMERA
+    ============================================================
     */
 
     const clearPendingCamera = () => {
 
-        setPendingCameraId(null);
+        setPendingCameraId(
+            null
+        );
 
     };
 
 
     /*
+    ============================================================
     RECORD AI DETECTION
+    ============================================================
     */
 
     const recordDetection = ({
@@ -467,23 +429,116 @@ export function SurveillanceProvider({
 
     }) => {
 
-        const time =
-            new Date().toLocaleTimeString();
+        /*
+        --------------------------------------------------------
+        CHECK CAMERA
+        --------------------------------------------------------
+        */
+
+        if (!camera) {
+
+            console.error(
+                "recordDetection: camera missing"
+            );
+
+            return;
+
+        }
+
+
+        /*
+        --------------------------------------------------------
+        NORMALIZE CLASS
+        --------------------------------------------------------
+        */
+
+        const normalizedClass =
+            String(
+                className || ""
+            )
+                .toLowerCase()
+                .trim();
+
+
+        if (!normalizedClass) {
+
+            return;
+
+        }
+
+
+        /*
+        --------------------------------------------------------
+        NORMALIZE CONFIDENCE
+        --------------------------------------------------------
+
+        YOLO may return:
+
+        0.94
+
+        OR
+
+        94
+        */
+
+        let normalizedConfidence =
+            Number(
+                confidence
+            );
+
+
+        if (
+            normalizedConfidence > 1
+        ) {
+
+            normalizedConfidence =
+                normalizedConfidence / 100;
+
+        }
+
+
+        if (
+            Number.isNaN(
+                normalizedConfidence
+            )
+        ) {
+
+            normalizedConfidence =
+                0;
+
+        }
+
+
+        /*
+        --------------------------------------------------------
+        CURRENT TIME
+        --------------------------------------------------------
+        */
 
         const now =
             Date.now();
 
 
+        const time =
+            new Date(
+                now
+            ).toLocaleTimeString();
+
+
         /*
-        ANALYZE THREAT
+        ========================================================
+        THREAT ENGINE
+        ========================================================
         */
 
         const assessment =
             assessThreat({
 
-                className,
+                className:
+                    normalizedClass,
 
-                confidence,
+                confidence:
+                    normalizedConfidence,
 
                 camera,
 
@@ -493,65 +548,21 @@ export function SurveillanceProvider({
 
 
         /*
-        IGNORE NON-THREATS
-        */
-
-        if (!assessment.isThreat) {
-
-            console.log(
-                `${className} ignored: ${assessment.reason}`
-            );
-
-            return;
-
-        }
-
-
-        /*
-        PREVENT DUPLICATE DETECTIONS
-        */
-
-        const detectionKey =
-            `${camera.id}-${className.toLowerCase()}`;
-
-
-        const lastDetection =
-            recentDetectionRef.current[
-                detectionKey
-            ] || 0;
-
-
-        const DUPLICATE_COOLDOWN =
-            60000;
-
-
-        if (
-            now - lastDetection <
-            DUPLICATE_COOLDOWN
-        ) {
-
-            console.log(
-                `Duplicate ${className} ignored for ${camera.name}`
-            );
-
-            return;
-
-        }
-
-
-        recentDetectionRef.current[
-            detectionKey
-        ] = now;
-
-
-        /*
+        ========================================================
         CREATE DETECTION ENTRY
+        ========================================================
+
+        Every YOLO scan is still saved here.
+
+        This means Detection History can contain
+        continuous AI detections.
+
+        Only threats are deduplicated.
         */
 
         const entry = {
 
             id:
-
                 `det-${Date.now()}-${Math.random()
                     .toString(36)
                     .slice(2, 7)}`,
@@ -571,9 +582,11 @@ export function SurveillanceProvider({
             coverageRadius:
                 camera.coverageRadius,
 
-            className,
+            className:
+                normalizedClass,
 
-            confidence,
+            confidence:
+                normalizedConfidence,
 
             snapshot,
 
@@ -588,7 +601,10 @@ export function SurveillanceProvider({
                 assessment.severity,
 
             priorityScore:
-                assessment.priorityScore
+                assessment.priorityScore,
+
+            isThreat:
+                assessment.isThreat
 
         };
 
@@ -598,38 +614,219 @@ export function SurveillanceProvider({
         */
 
         setDetections((prev) =>
-            [entry, ...prev].slice(0, 100)
+
+            [
+                entry,
+                ...prev
+            ].slice(
+                0,
+                100
+            )
+
         );
 
 
         /*
-        ICON MAP
+        ========================================================
+        NON-THREAT OBJECT
+        ========================================================
+        */
+
+        if (!assessment.isThreat) {
+
+            console.log(
+                `${normalizedClass} detected but is not a threat`
+            );
+
+            return;
+
+        }
+
+
+        /*
+        ========================================================
+        THREAT DUPLICATE KEY
+        ========================================================
+
+        Camera + object.
+
+        Example:
+
+        1-person
+        1-car
+        2-person
+
+        Each gets its own threat stream.
+        */
+
+        const threatKey =
+            `${camera.id}-${normalizedClass}`;
+
+
+        /*
+        ========================================================
+        FIND EXISTING ACTIVE THREAT
+        ========================================================
+        */
+
+        const existingThreat =
+            threats.find(
+                (threat) =>
+
+                    threat.cameraId ===
+                    camera.id &&
+
+                    String(
+                        threat.className || ""
+                    )
+                        .toLowerCase() ===
+                    normalizedClass &&
+
+                    threat.status ===
+                    "ACTIVE"
+            );
+
+
+        /*
+        ========================================================
+        UPDATE EXISTING THREAT
+        ========================================================
+
+        IMPORTANT:
+
+        If YOLO sees the same object again,
+        don't create another threat.
+
+        Instead update:
+
+        - confidence
+        - detection count
+        - time
+        - timestamp
+        - snapshot
+        - priority
+        */
+
+        if (existingThreat) {
+
+            console.log(
+                `Updating existing threat: ${threatKey}`
+            );
+
+
+            setThreats((prevThreats) =>
+
+                prevThreats.map(
+                    (threat) => {
+
+                        if (
+                            threat.id !==
+                            existingThreat.id
+                        ) {
+
+                            return threat;
+
+                        }
+
+
+                        return {
+
+                            ...threat,
+
+                            confidence:
+                                `${(
+                                    normalizedConfidence *
+                                    100
+                                ).toFixed(1)}%`,
+
+                            detectionCount:
+                                (
+                                    threat.detectionCount ||
+                                    0
+                                ) + 1,
+
+                            time,
+
+                            timestamp:
+                                now,
+
+                            priorityScore:
+                                assessment.priorityScore,
+
+                            severity:
+                                assessment.severity,
+
+                            description:
+                                assessment.reason,
+
+                            snapshot
+
+                        };
+
+                    }
+
+                )
+
+            );
+
+
+            /*
+            IMPORTANT:
+
+            Do NOT create another incident.
+
+            The existing incident correlation will continue
+            from the original threat/detection.
+            */
+
+            return;
+
+        }
+
+
+        /*
+        ========================================================
+        CREATE NEW THREAT
+        ========================================================
         */
 
         const icons = {
 
-            person: "👤",
+            person:
+                "👤",
 
-            car: "🚗",
+            car:
+                "🚗",
 
-            truck: "🚛",
+            truck:
+                "🚛",
 
-            bus: "🚌",
+            bus:
+                "🚌",
 
-            motorcycle: "🏍️",
+            motorcycle:
+                "🏍️",
 
-            bicycle: "🚲",
+            bicycle:
+                "🚲",
 
-            drone: "🚁",
+            drone:
+                "🚁",
 
-            airplane: "✈️"
+            airplane:
+                "✈️",
+
+            bird:
+                "🐦",
+
+            dog:
+                "🐕",
+
+            cat:
+                "🐈"
 
         };
 
-
-        /*
-        CREATE INDIVIDUAL THREAT
-        */
 
         const newThreat = {
 
@@ -651,6 +848,16 @@ export function SurveillanceProvider({
             zone:
                 camera.zone,
 
+            /*
+            VERY IMPORTANT
+
+            Store className so future YOLO detections
+            can identify this existing threat.
+            */
+
+            className:
+                normalizedClass,
+
             severity:
                 assessment.severity,
 
@@ -658,9 +865,9 @@ export function SurveillanceProvider({
                 assessment.priorityScore,
 
             confidence:
-
                 `${(
-                    confidence * 100
+                    normalizedConfidence *
+                    100
                 ).toFixed(1)}%`,
 
             detectionCount,
@@ -680,9 +887,8 @@ export function SurveillanceProvider({
                 assessment.reason,
 
             icon:
-
                 icons[
-                    className.toLowerCase()
+                    normalizedClass
                 ] || "⚠",
 
             snapshot
@@ -691,17 +897,28 @@ export function SurveillanceProvider({
 
 
         /*
-        SAVE THREAT
+        ========================================================
+        SAVE NEW THREAT
+        ========================================================
         */
 
         setThreats((prev) =>
-            [newThreat, ...prev]
+
+            [
+                newThreat,
+                ...prev
+            ].slice(
+                0,
+                100
+            )
+
         );
 
 
         /*
-        MULTI-CAMERA
+        ========================================================
         INCIDENT CORRELATION
+        ========================================================
         */
 
         setIncidents((prevIncidents) => {
@@ -719,7 +936,9 @@ export function SurveillanceProvider({
 
 
             /*
-            RELATED INCIDENT FOUND
+            ----------------------------------------------------
+            EXISTING INCIDENT
+            ----------------------------------------------------
             */
 
             if (relatedIncident) {
@@ -747,23 +966,27 @@ export function SurveillanceProvider({
                             ? updatedIncident
 
                             : incident
+
                 );
 
             }
 
 
             /*
+            ----------------------------------------------------
             CREATE NEW INCIDENT
+            ----------------------------------------------------
             */
 
             const newIncident = {
 
                 id:
-
                     `INC-${String(
                         nextIncidentId.current++
-                    ).padStart(4, "0")}`,
-
+                    ).padStart(
+                        4,
+                        "0"
+                    )}`,
 
                 title:
                     assessment.title,
@@ -781,7 +1004,9 @@ export function SurveillanceProvider({
                     camera.location,
 
                 zones: [
+
                     camera.zone
+
                 ],
 
                 cameras: [
@@ -839,65 +1064,77 @@ export function SurveillanceProvider({
 
 
     /*
+    ============================================================
     CAMERA STATISTICS
+    ============================================================
     */
 
     const activeCameras =
         cameras.filter(
             (camera) =>
-                camera.status === "ACTIVE"
+                camera.status ===
+                "ACTIVE"
         );
 
 
     const warningCameras =
         cameras.filter(
             (camera) =>
-                camera.status === "WARNING"
+                camera.status ===
+                "WARNING"
         );
 
 
     const offlineCameras =
         cameras.filter(
             (camera) =>
-                camera.status === "OFFLINE"
+                camera.status ===
+                "OFFLINE"
         );
 
 
     /*
+    ============================================================
     THREAT STATISTICS
+    ============================================================
     */
 
     const activeThreats =
         threats.filter(
             (threat) =>
-                threat.status === "ACTIVE"
+                threat.status ===
+                "ACTIVE"
         );
 
 
     const criticalThreats =
         activeThreats.filter(
             (threat) =>
-                threat.severity === "CRITICAL"
+                threat.severity ===
+                "CRITICAL"
         );
 
 
     const highThreats =
         activeThreats.filter(
             (threat) =>
-                threat.severity === "HIGH"
+                threat.severity ===
+                "HIGH"
         );
 
 
     const mediumThreats =
         activeThreats.filter(
             (threat) =>
-                threat.severity === "MEDIUM"
+                threat.severity ===
+                "MEDIUM"
         );
 
 
     /*
-    SHARE DATA WITH
-    ENTIRE APPLICATION
+    ============================================================
+    PROVIDER VALUE
+    ============================================================
     */
 
     const value = {
