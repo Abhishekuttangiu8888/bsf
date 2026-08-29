@@ -1,11 +1,20 @@
+/* =========================================================
+   INCIDENTS PAGE
+   ========================================================= */
+
 .incidentsPage {
     width: 100%;
     min-height: 100%;
     padding: 28px;
     box-sizing: border-box;
+    background: #f5f7fa;
+    color: #1f2937;
 }
 
-/* ================= TOP ================= */
+
+/* =========================================================
+   TOP
+   ========================================================= */
 
 .top {
     display: flex;
@@ -18,28 +27,32 @@
 .top h2 {
     margin: 0;
     font-size: 24px;
+    font-weight: 700;
+    color: #1f2937;
     letter-spacing: 0.5px;
 }
 
 .top p {
     margin: 8px 0 0;
     font-size: 14px;
-    color: #8b95a7;
+    color: #6b7280;
 }
 
 .systemStatus {
     padding: 10px 16px;
-    border: 1px solid rgba(0, 220, 130, 0.25);
+    border: 1px solid #bbf7d0;
     border-radius: 8px;
-    background: rgba(0, 220, 130, 0.08);
-    color: #00d084;
+    background: #f0fdf4;
+    color: #16a34a;
     font-size: 12px;
     font-weight: 700;
     white-space: nowrap;
 }
 
 
-/* ================= STATISTICS ================= */
+/* =========================================================
+   STATISTICS
+   ========================================================= */
 
 .stats {
     display: grid;
@@ -51,85 +64,110 @@
 .statCard {
     min-height: 130px;
     padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-sizing: border-box;
+
+    border: 1px solid #e5e7eb;
     border-radius: 10px;
-    background: #111827;
+
+    background: #ffffff;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
 }
 
 .statCard span {
     font-size: 11px;
     font-weight: 700;
-    color: #8b95a7;
+    color: #6b7280;
     letter-spacing: 0.7px;
 }
 
 .statCard h3 {
     margin: 12px 0 6px;
     font-size: 30px;
-    color: #ffffff;
+    color: #1f2937;
 }
 
 .statCard p {
     margin: 0;
     font-size: 12px;
-    color: #7d8797;
+    color: #9ca3af;
 }
 
 .activeNumber {
-    color: #00d084 !important;
+    color: #16a34a !important;
 }
 
 .criticalNumber {
-    color: #ff4d5e !important;
+    color: #dc2626 !important;
 }
 
 .highNumber {
-    color: #ff9f43 !important;
+    color: #ea580c !important;
 }
 
 
-/* ================= INCIDENT PANEL ================= */
+/* =========================================================
+   INCIDENT PANEL
+   ========================================================= */
 
 .incidentPanel {
-    background: #111827;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: #ffffff;
+
+    border: 1px solid #e5e7eb;
     border-radius: 12px;
+
     overflow: hidden;
+
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
 }
+
+
+/* =========================================================
+   PANEL HEADER
+   ========================================================= */
 
 .panelHeader {
     padding: 20px 24px;
+
     display: flex;
     align-items: center;
     justify-content: space-between;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .panelHeader h3 {
     margin: 0;
     font-size: 16px;
+    color: #1f2937;
 }
 
 .panelHeader p {
     margin: 7px 0 0;
     font-size: 12px;
-    color: #8b95a7;
+    color: #6b7280;
 }
 
 .panelHeader > span {
     padding: 7px 12px;
+
     border-radius: 6px;
-    background: rgba(0, 208, 132, 0.1);
-    color: #00d084;
+
+    background: #f0fdf4;
+    color: #16a34a;
+
     font-size: 11px;
     font-weight: 700;
 }
 
 
-/* ================= INCIDENT LIST ================= */
+/* =========================================================
+   INCIDENT LIST
+   ========================================================= */
 
 .incidentList {
     width: 100%;
@@ -137,11 +175,21 @@
 
 .incidentItem {
     display: grid;
-    grid-template-columns: 55px minmax(0, 1fr) 120px 80px;
+
+    grid-template-columns:
+        55px
+        minmax(0, 1fr)
+        120px
+        80px;
+
     align-items: center;
+
     gap: 15px;
+
     padding: 20px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+
+    border-bottom: 1px solid #eef0f3;
+
     transition: background 0.2s ease;
 }
 
@@ -150,26 +198,34 @@
 }
 
 .incidentItem:hover {
-    background: rgba(255, 255, 255, 0.025);
+    background: #f9fafb;
 }
 
 
-/* ================= ICON ================= */
+/* =========================================================
+   ICON
+   ========================================================= */
 
 .incidentIcon {
     width: 46px;
     height: 46px;
+
     border-radius: 10px;
+
     display: flex;
     align-items: center;
     justify-content: center;
+
     font-size: 22px;
-    background: rgba(255, 77, 94, 0.1);
-    border: 1px solid rgba(255, 77, 94, 0.15);
+
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
 }
 
 
-/* ================= INCIDENT INFO ================= */
+/* =========================================================
+   INCIDENT INFO
+   ========================================================= */
 
 .incidentInfo {
     min-width: 0;
@@ -179,30 +235,40 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
     gap: 15px;
 }
 
 .incidentTitleRow h4 {
     margin: 0;
+
     font-size: 15px;
-    color: #ffffff;
+    font-weight: 700;
+
+    color: #1f2937;
 }
 
 .incidentTitleRow small {
     display: block;
+
     margin-top: 5px;
-    color: #657084;
+
+    color: #9ca3af;
     font-size: 11px;
 }
 
 .incidentInfo > p {
     margin: 8px 0;
+
     font-size: 13px;
-    color: #a4adbb;
+
+    color: #6b7280;
 }
 
 
-/* ================= META ================= */
+/* =========================================================
+   META
+   ========================================================= */
 
 .meta {
     display: flex;
@@ -212,46 +278,62 @@
 
 .meta span {
     font-size: 11px;
-    color: #7d8797;
+    color: #9ca3af;
 }
 
 
-/* ================= SEVERITY ================= */
+/* =========================================================
+   SEVERITY
+   ========================================================= */
 
 .critical,
 .high,
 .medium {
     display: inline-flex;
+
     align-items: center;
     justify-content: center;
+
     padding: 5px 9px;
+
     border-radius: 5px;
+
     font-size: 10px;
     font-weight: 800;
+
     letter-spacing: 0.4px;
+
     white-space: nowrap;
 }
 
 .critical {
-    color: #ff4d5e;
-    background: rgba(255, 77, 94, 0.12);
-    border: 1px solid rgba(255, 77, 94, 0.2);
+    color: #dc2626;
+
+    background: #fef2f2;
+
+    border: 1px solid #fecaca;
 }
 
 .high {
-    color: #ff9f43;
-    background: rgba(255, 159, 67, 0.12);
-    border: 1px solid rgba(255, 159, 67, 0.2);
+    color: #ea580c;
+
+    background: #fff7ed;
+
+    border: 1px solid #fed7aa;
 }
 
 .medium {
-    color: #f1c40f;
-    background: rgba(241, 196, 15, 0.12);
-    border: 1px solid rgba(241, 196, 15, 0.2);
+    color: #ca8a04;
+
+    background: #fefce8;
+
+    border: 1px solid #fde68a;
 }
 
 
-/* ================= STATUS ================= */
+/* =========================================================
+   STATUS
+   ========================================================= */
 
 .incidentStatus {
     display: flex;
@@ -261,11 +343,14 @@
 .incidentStatus span {
     font-size: 11px;
     font-weight: 700;
-    color: #00d084;
+
+    color: #16a34a;
 }
 
 
-/* ================= ACTION ================= */
+/* =========================================================
+   ACTION
+   ========================================================= */
 
 .actions {
     display: flex;
@@ -274,204 +359,302 @@
 
 .actions button {
     padding: 8px 15px;
-    border: 1px solid rgba(0, 208, 132, 0.35);
+
+    border: 1px solid #bbf7d0;
     border-radius: 6px;
-    background: rgba(0, 208, 132, 0.08);
-    color: #00d084;
+
+    background: #f0fdf4;
+    color: #16a34a;
+
     font-size: 11px;
     font-weight: 700;
+
     cursor: pointer;
+
     transition: 0.2s ease;
 }
 
 .actions button:hover {
-    background: #00d084;
-    color: #07120d;
+    background: #16a34a;
+    color: #ffffff;
 }
 
 
-/* ================= EMPTY STATE ================= */
+/* =========================================================
+   EMPTY STATE
+   ========================================================= */
 
 .emptyState {
     min-height: 330px;
+
     padding: 50px 20px;
+
     display: flex;
     flex-direction: column;
+
     align-items: center;
     justify-content: center;
+
     text-align: center;
 }
 
 .emptyIcon {
     width: 70px;
     height: 70px;
+
     margin-bottom: 18px;
+
     border-radius: 50%;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 208, 132, 0.08);
+
+    background: #f0fdf4;
+
+    color: #16a34a;
+
     font-size: 32px;
 }
 
 .emptyState h3 {
     margin: 0;
+
     font-size: 16px;
+
+    color: #1f2937;
+
     letter-spacing: 0.5px;
 }
 
 .emptyState p {
     max-width: 480px;
+
     margin: 12px 0 0;
-    color: #7d8797;
+
+    color: #6b7280;
+
     font-size: 13px;
+
     line-height: 1.7;
 }
 
 
-/* ================= MODAL OVERLAY ================= */
+/* =========================================================
+   MODAL OVERLAY
+   ========================================================= */
 
 .overlay {
     position: fixed;
+
     inset: 0;
+
     z-index: 1000;
+
     padding: 20px;
+
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.75);
+
+    background: rgba(15, 23, 42, 0.45);
+
     backdrop-filter: blur(5px);
 }
 
 
-/* ================= MODAL ================= */
+/* =========================================================
+   MODAL
+   ========================================================= */
 
 .modal {
     position: relative;
+
     width: min(850px, 100%);
+
     max-height: 90vh;
+
     overflow-y: auto;
+
     padding: 30px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    box-sizing: border-box;
+
+    border: 1px solid #e5e7eb;
+
     border-radius: 14px;
-    background: #111827;
-    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.5);
+
+    background: #ffffff;
+
+    box-shadow: 0 25px 70px rgba(15, 23, 42, 0.2);
 }
 
 
-/* ================= CLOSE BUTTON ================= */
+/* =========================================================
+   CLOSE BUTTON
+   ========================================================= */
 
 .closeButton {
     position: absolute;
+
     top: 18px;
     right: 18px;
+
     width: 35px;
     height: 35px;
+
     border: none;
+
     border-radius: 7px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #ffffff;
+
+    background: #f3f4f6;
+
+    color: #4b5563;
+
     font-size: 16px;
+
     cursor: pointer;
+
     transition: 0.2s ease;
 }
 
 .closeButton:hover {
-    background: rgba(255, 77, 94, 0.15);
-    color: #ff4d5e;
+    background: #fef2f2;
+    color: #dc2626;
 }
 
 
-/* ================= MODAL HEADER ================= */
+/* =========================================================
+   MODAL HEADER
+   ========================================================= */
 
 .modalHeader {
     padding-right: 50px;
+
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+
     gap: 20px;
 }
 
 .incidentId {
     display: block;
+
     margin-bottom: 8px;
-    color: #00d084;
+
+    color: #16a34a;
+
     font-size: 11px;
     font-weight: 700;
+
     letter-spacing: 1px;
 }
 
 .modalHeader h2 {
     margin: 0;
+
     font-size: 24px;
-    color: #ffffff;
+
+    color: #1f2937;
 }
 
 .modalHeader p {
     margin: 10px 0 0;
+
     font-size: 13px;
-    color: #8b95a7;
+
+    color: #6b7280;
 }
 
 
-/* ================= DESCRIPTION ================= */
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
 
 .description {
     margin-top: 28px;
+
     padding: 18px;
-    border-left: 3px solid #00d084;
+
+    border-left: 3px solid #16a34a;
+
     border-radius: 6px;
-    background: rgba(0, 208, 132, 0.05);
+
+    background: #f0fdf4;
 }
 
 .description span {
     display: block;
+
     margin-bottom: 8px;
-    color: #00d084;
+
+    color: #16a34a;
+
     font-size: 10px;
+
     font-weight: 800;
+
     letter-spacing: 0.8px;
 }
 
 .description p {
     margin: 0;
-    color: #c2c8d1;
+
+    color: #4b5563;
+
     font-size: 13px;
+
     line-height: 1.7;
 }
 
 
-/* ================= DETAILS GRID ================= */
+/* =========================================================
+   DETAILS GRID
+   ========================================================= */
 
 .detailsGrid {
     margin-top: 22px;
+
     display: grid;
+
     grid-template-columns: repeat(4, 1fr);
+
     gap: 12px;
 }
 
 .detailsGrid > div {
     padding: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border: 1px solid #e5e7eb;
+
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.025);
+
+    background: #f9fafb;
 }
 
 .detailsGrid span {
     display: block;
+
     margin-bottom: 8px;
-    color: #7d8797;
+
+    color: #6b7280;
+
     font-size: 10px;
+
     font-weight: 700;
 }
 
 .detailsGrid strong {
-    color: #ffffff;
+    color: #1f2937;
+
     font-size: 14px;
 }
 
 
-/* ================= SECTIONS ================= */
+/* =========================================================
+   SECTIONS
+   ========================================================= */
 
 .section {
     margin-top: 28px;
@@ -479,105 +662,149 @@
 
 .section h3 {
     margin: 0 0 14px;
+
     font-size: 15px;
-    color: #ffffff;
+
+    color: #1f2937;
 }
 
 
-/* ================= CAMERA LIST ================= */
+/* =========================================================
+   CAMERA LIST
+   ========================================================= */
 
 .cameraList {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+
+    grid-template-columns:
+        repeat(auto-fit, minmax(180px, 1fr));
+
     gap: 12px;
 }
 
 .cameraCard {
     padding: 15px;
+
     display: flex;
     flex-direction: column;
+
     gap: 7px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border: 1px solid #e5e7eb;
+
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.025);
+
+    background: #f9fafb;
 }
 
 .cameraCard strong {
     font-size: 13px;
-    color: #ffffff;
+    color: #1f2937;
 }
 
 .cameraCard span {
     font-size: 11px;
-    color: #7d8797;
+    color: #6b7280;
 }
 
 
-/* ================= DETECTION LIST ================= */
+/* =========================================================
+   DETECTION LIST
+   ========================================================= */
 
 .detectionList {
     display: flex;
+
     flex-direction: column;
+
     gap: 10px;
 }
 
 .detectionItem {
     padding: 14px 16px;
+
     display: flex;
+
     align-items: center;
+
     justify-content: space-between;
+
     gap: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.07);
+
+    border: 1px solid #e5e7eb;
+
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.025);
+
+    background: #f9fafb;
 }
 
 .detectionItem > div {
     display: flex;
+
     flex-direction: column;
+
     gap: 5px;
 }
 
 .detectionItem strong {
-    color: #ffffff;
+    color: #1f2937;
+
     font-size: 13px;
+
     text-transform: capitalize;
 }
 
 .detectionItem div span {
-    color: #7d8797;
+    color: #6b7280;
+
     font-size: 11px;
 }
 
 .detectionItem > span {
-    color: #00d084;
+    color: #16a34a;
+
     font-size: 13px;
+
     font-weight: 700;
 }
 
 
-/* ================= MODAL BUTTON ================= */
+/* =========================================================
+   MODAL BUTTON
+   ========================================================= */
 
 .closeModalButton {
     width: 100%;
+
     margin-top: 28px;
+
     padding: 13px;
+
     border: none;
+
     border-radius: 8px;
-    background: #00d084;
-    color: #07120d;
+
+    background: #16a34a;
+
+    color: #ffffff;
+
     font-size: 12px;
+
     font-weight: 800;
+
     cursor: pointer;
+
     transition: 0.2s ease;
 }
 
 .closeModalButton:hover {
-    opacity: 0.85;
+    background: #15803d;
 }
 
 
-/* ================= TABLET ================= */
+/* =========================================================
+   TABLET
+   ========================================================= */
 
 @media (max-width: 1100px) {
 
@@ -586,7 +813,10 @@
     }
 
     .incidentItem {
-        grid-template-columns: 50px minmax(0, 1fr) 80px;
+        grid-template-columns:
+            50px
+            minmax(0, 1fr)
+            80px;
     }
 
     .incidentStatus {
@@ -596,11 +826,12 @@
     .detailsGrid {
         grid-template-columns: repeat(2, 1fr);
     }
-
 }
 
 
-/* ================= MOBILE ================= */
+/* =========================================================
+   MOBILE
+   ========================================================= */
 
 @media (max-width: 700px) {
 
@@ -618,12 +849,15 @@
 
     .systemStatus {
         width: 100%;
+
         box-sizing: border-box;
+
         text-align: center;
     }
 
     .stats {
         grid-template-columns: 1fr;
+
         gap: 12px;
     }
 
@@ -633,22 +867,31 @@
 
     .panelHeader {
         padding: 18px;
+
         flex-direction: column;
+
         align-items: flex-start;
+
+        gap: 12px;
     }
 
     .incidentItem {
-        grid-template-columns: 48px minmax(0, 1fr);
+        grid-template-columns:
+            48px
+            minmax(0, 1fr);
+
         padding: 18px;
     }
 
     .incidentTitleRow {
         flex-direction: column;
+
         gap: 8px;
     }
 
     .actions {
         grid-column: 1 / -1;
+
         justify-content: flex-end;
     }
 
@@ -658,17 +901,21 @@
 
     .overlay {
         padding: 10px;
+
         align-items: flex-end;
     }
 
     .modal {
         max-height: 92vh;
+
         padding: 22px 18px;
+
         border-radius: 14px 14px 0 0;
     }
 
     .modalHeader {
         flex-direction: column;
+
         padding-right: 40px;
     }
 
@@ -683,11 +930,12 @@
     .cameraList {
         grid-template-columns: 1fr;
     }
-
 }
 
 
-/* ================= SMALL MOBILE ================= */
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
 
 @media (max-width: 420px) {
 
@@ -706,6 +954,7 @@
     .incidentIcon {
         width: 40px;
         height: 40px;
+
         font-size: 18px;
     }
 
@@ -720,5 +969,4 @@
     .modal {
         padding: 20px 15px;
     }
-
 }
